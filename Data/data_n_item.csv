@@ -1,0 +1,33 @@
+﻿item,bigger_places,places,length_diff,one_digit_diff_not_zero,transposition,inserting_zero,e3_categories,category,left_num,right_num,left_number_range,right_number_range,item_comparison_unordered,item_comparison,item_type
+36 v 306,3,2v3,y,n,n,y,omit,M-DP,36,306,decade,hundred,decade_hundred,decade_hundred,Inserting_zero
+64 v 604,3,2v3,y,n,n,y,omit,M-DP,64,604,decade,hundred,decade_hundred,decade_hundred,Inserting_zero
+85 v 850,3,2v3,y,n,n,y,omit,M-DP,85,850,decade,hundred,decade_hundred,decade_hundred,Inserting_zero
+201 v 21,3,2v3,y,n,n,y,omit,M-DP,201,21,hundred,decade,hundred_decade,decade_hundred,Inserting_zero
+402 v 42,3,2v3,y,n,n,y,omit,M-DP,402,42,hundred,decade,hundred_decade,decade_hundred,Inserting_zero
+670 v 67,3,2v3,y,n,n,y,omit,M-DP,670,67,hundred,decade,hundred_decade,decade_hundred,Inserting_zero
+807 v 78,3,2v3,y,n,n,y,omit,M-DP,807,78,hundred,decade,hundred_decade,decade_hundred,Inserting_zero
+900 v 99,3,2v3,y,n,n,y,omit,M-DP,900,99,hundred,decade,hundred_decade,decade_hundred,Inserting_zero
+485 v 4085,4,3v4,y,n,n,y,omit,M-DP,485,4085,hundred,thousand,hundred_thousand,hundred_thousand,Inserting_zero
+1000v100,4,3v4,n,n,n,y,omit,M-DP,1000,100,thousand,hundred,thousand_hundred,hundred_thousand,Inserting_zero
+1000 v 100,4,3v4,n,n,n,y,omit,M-DP,1000,100,thousand,hundred,thousand_hundred,hundred_thousand,Inserting_zero
+3070 v 307,4,3v4,y,n,n,y,omit,M-DP,3070,307,thousand,hundred,thousand_hundred,hundred_thousand,Inserting_zero
+102 v 120,3,3v3,n,n,y,n,3d_trans,M-SP-with-T,102,120,hundred,hundred,hundred_hundred,hundred_hundred,Transposition
+189 v 198,3,3v3,n,n,y,n,3d_trans,M-SP-with-T,189,198,hundred,hundred,hundred_hundred,hundred_hundred,Transposition
+206 v 260,3,3v3,n,n,y,n,3d_trans,M-SP-with-T,206,260,hundred,hundred,hundred_hundred,hundred_hundred,Transposition
+350 v 305,3,3v3,n,n,y,n,3d_trans,M-SP-with-T,350,305,hundred,hundred,hundred_hundred,hundred_hundred,Transposition
+362 v 326,3,3v3,n,n,y,n,3d_trans,M-SP-with-T,362,326,hundred,hundred,hundred_hundred,hundred_hundred,Transposition
+14 v 41,2,2v2,n,n,y,n,2d_trans,M-SP-with-T,14,41,teen,decade,teen_decade,teen_decade,Transposition
+1900 v 1009,4,4v4,n,n,y,n,4d_trans,M-SP-with-T,1900,1009,thousand,thousand,thousand_thousand,thousand_thousand,Transposition
+1002 v 1020,4,4v4,n,n,y,n,4d_trans,M-SP-with-T,1002,1020,thousand,thousand,thousand_thousand,thousand_thousand,Transposition
+2060 v 2006,4,4v4,n,n,y,n,4d_trans,M-SP-with-T,2060,2006,thousand,thousand,thousand_thousand,thousand_thousand,Transposition
+5109 v 5910,4,4v4,n,n,y,n,4d_trans,M-SP-with-T,5109,5910,thousand,thousand,thousand_thousand,thousand_thousand,Transposition
+8503 v 8350,4,4v4,n,n,y,n,4d_trans,M-SP-with-T,8503,8350,thousand,thousand,thousand_thousand,thousand_thousand,Transposition
+101 v 100,3,3v3,n,n,n,n,3d_no_trans,M-SP-no-T,101,100,hundred,hundred,hundred_hundred,hundred_hundred,Neither
+105 v 125,3,3v3,n,n,n,n,3d_no_trans,M-SP-no-T,105,125,hundred,hundred,hundred_hundred,hundred_hundred,Neither
+677 v 766,3,3v3,n,n,n,n,3d_no_trans,M-SP-no-T,677,766,hundred,hundred,hundred_hundred,hundred_hundred,Neither
+3 v 7,1,1v1,n,y,n,n,single,S,3,7,single,single,single_single,single_single,Neither
+2 v 8,1,1v1,n,y,n,n,single,S,2,8,single,single,single_single,single_single,Neither
+12 v 22,2,2v2,n,y,n,n,teens,M-SP-no-T,12,22,teen,decade,teen_decade,teen_decade,Neither
+11 v 24,2,2v2,n,n,n,n,teens,M-SP-no-T,11,24,teen,decade,teen_decade,teen_decade,Neither
+15 v 5,2,1v2,y,y,n,n,omit,S,15,5,teen,single,teen_single,single_teen,Neither
+7014 v 7804,4,4v4,n,n,n,n,4d_no_trans,M-SP-no-T,7014,7804,thousand,thousand,thousand_thousand,thousand_thousand,Neither

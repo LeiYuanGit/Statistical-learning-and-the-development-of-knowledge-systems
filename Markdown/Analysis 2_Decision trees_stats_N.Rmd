@@ -1,0 +1,74 @@
+---
+title: "Analysis 2_Decision trees_stats_N"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Load libraries & data
+```{r}
+library(party)
+library(tidyverse)
+library(here)
+library(caret)
+library(partykit) 
+```
+## Load data (only need to change this for the More task analysis)
+```{r}
+# indicate the task name, make it easier for adopting the same code for both the N and M tasks
+task_name = "n"
+
+# input files
+data_long = read.csv(here(paste0("Data/data_", task_name,"_long.csv")))
+
+data_tree_nodes = read.csv(here(paste0("Data/data_tree_nodes_",task_name,".csv")))
+
+# within each quartile, some items don't have at least 10 children responses. exclude them from the item level accuracy graph, but not the overall analysis???
+min_item_n = 10
+
+data_item_binomial = data_item_binomial %>% 
+  filter(item_total_n >= min_item_n) 
+```
+
+## Grow Ctrees
+```{r}
+set.seed(240)
+
+# make sure that all feature cols are factors
+data_long = data_long %>%
+  mutate(bigger_places = as.factor(bigger_places),
+         places = as.factor(places),
+         length_diff = as.factor(length_diff),
+         one_digit_diff_not_zero = as.factor(one_digit_diff_not_zero),
+         transposition = as.factor(transposition),
+         inserting_zero = as.factor(inserting_zero))
+
+# initialize empty variables 
+prediction_acc_results  = NULL  # save confusion matrix results for each tree
+data_long_terminal = NULL # save the terminal node number for each row (or trial), for plotting the item-level accuracy graphs for each quartile
+
+set.seed(240)
+
+for (i in 1:4) {
+  # get quartile data
+  temp_data = subset(data_long, quartile == i) 
+  temp_inner_nodes = subset(data_tree_nodes, quartile == 1) %>%
+    filter(node_type == "inner")
+  
+  # grow ctree
+  ct = ctree(factor(acc) ~ 
+               bigger_places + places + length_diff + one_digit_diff_not_zero +
+               transposition + inserting_zero, data = temp_data)
+  
+  plot(ct)
+  
+  # loop through each inner node and computer the stats
+  for (j in 1:nrow(temp_inner_nodes)) {
+    
+    
+  }
+  
+  
+}
+```

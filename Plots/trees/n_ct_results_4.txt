@@ -1,0 +1,11 @@
+
+	 Conditional inference tree with 2 terminal nodes
+
+Response:  factor(acc) 
+Inputs:  bigger_places, places, length_diff, one_digit_diff_not_zero, transposition, inserting_zero 
+Number of observations:  1660 
+
+1) places == {3v4}; criterion = 0.996, statistic = 23.229
+  2)*  weights = 90 
+1) places == {1v1, 1v2, 2v2, 2v3, 3v3, 4v4}
+  3)*  weights = 1570 

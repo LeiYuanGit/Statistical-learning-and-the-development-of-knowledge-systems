@@ -1,0 +1,20 @@
+
+	 Conditional inference tree with 5 terminal nodes
+
+Response:  factor(acc) 
+Inputs:  bigger_places, places, length_diff, one_digit_diff_not_zero, transposition, inserting_zero 
+Number of observations:  1471 
+
+1) places == {2v3, 3v3, 3v4, 4v4}; criterion = 1, statistic = 108.178
+  2) places == {2v3}; criterion = 0.968, statistic = 12.67
+    3)*  weights = 534 
+  2) places == {3v3, 3v4, 4v4}
+    4)*  weights = 532 
+1) places == {1v1, 1v2, 2v2}
+  5) transposition == {y}; criterion = 1, statistic = 26.448
+    6)*  weights = 29 
+  5) transposition == {n}
+    7) bigger_places == {2}; criterion = 1, statistic = 20.029
+      8)*  weights = 275 
+    7) bigger_places == {1}
+      9)*  weights = 101 

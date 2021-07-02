@@ -1,0 +1,70 @@
+---
+title: 'Analysis 1: Overall descriptive results'
+output: rmarkdown::github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, results = 'hide', message=FALSE)
+```
+
+## Overview
+
+This code provides an overall view of children's performance in the two tasks. 
+
+## Load libraries
+```{r}
+library("here")
+library("tidyverse")
+library("afex")
+library("lme4")
+```
+## Dealing with missing values in sex and ses
+```{r}
+```
+
+
+## N task overall performance: acc_subj ~ age + sex + ses
+```{r}
+# load data
+data_n = read.csv(here("Data/data_n_long.csv"), , check.names = FALSE)
+
+# make sure that age, sex, and ses are all factors before running the model
+data_n = data_n %>%
+  mutate(age_years_group = as.factor(age_years_group),
+         sex = as.factor(sex),
+         ses = as.factor(ses))
+
+# summarize individual level (not trial level) overall performance data
+data_n_subj_level = data_n %>%
+  group_by(id, age_years_group, sex, ses) %>%
+  summarise(acc_subj = mean(acc)) 
+  mutate(id = as.factor(id))
+
+# run the model
+model = mixed(acc_subj ~ age_years_group + sex + ses + (1|id), data = data_n_subj_level, REML = TRUE, method = "KR")
+model
+
+library("MASS")
+model = lm(acc_subj ~ age_years_group + sex + ses, data = data_n_subj_level)
+model
+anova(model)
+
+step.model = stepAIC(model, trace = FALSE)
+```
+
+## More task overall performance: acc_subj ~ age + gender + ses
+```{r}
+
+```
+
+## N and More task combined: acc_item ~ age + task + (1|subj) + (1|item)
+```{r}
+# use within subject data only, so we know for sure that the data are from the same child
+
+```
+
+## Plots
+```{r}
+
+
+```

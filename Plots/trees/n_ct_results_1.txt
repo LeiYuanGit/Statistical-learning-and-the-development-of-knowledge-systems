@@ -1,0 +1,14 @@
+
+	 Conditional inference tree with 3 terminal nodes
+
+Response:  factor(acc) 
+Inputs:  bigger_places, places, length_diff, one_digit_diff_not_zero, transposition, inserting_zero 
+Number of observations:  1427 
+
+1) one_digit_diff_not_zero == {n}; criterion = 1, statistic = 46.996
+  2)*  weights = 1150 
+1) one_digit_diff_not_zero == {y}
+  3) bigger_places == {2}; criterion = 0.993, statistic = 13.046
+    4)*  weights = 176 
+  3) bigger_places == {1}
+    5)*  weights = 101 
