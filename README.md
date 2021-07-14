@@ -9,7 +9,7 @@ Human knowledge of the world is often organized into systems of inter-related, m
 - xx children have recieved both tasks. 
 
 ## Code/analysis files
-- [Data cleaning.md](Markdown/Data cleaning.md)
+- [Data cleaning.Rmd](Markdown/Data cleaning.Rmd)
 This code cleans the raw N and More participants data:
 
 1. convert data from wide to long format
