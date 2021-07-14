@@ -19,6 +19,14 @@ This code cleans the raw N and More participants data:
 
 It also identifies children who had completed both tasks, by concatenating their "DOB, DOE, and location" and find common values both the n and more data.
 
+The critical output files for further analyses are: 
+
+* Data/data_n_long.csv (long format trial-level data for N, with subject quartile and feature information)    
+* Data/data_more_long.csv (long format trial-level data for More, with subject quartile and feature information)
+* Data/data_within_ids.csv (the ids for children who had completed both task)
+* Data/data_n_item_binomial.csv (binomial test results for each item within each quartile in the which-N task)
+* Data/data_more_item_binomial.csv (binomial test results for each item within each quartile in the which-More task)
+
 ## Load libraries
 ```{r}
 library("here")
