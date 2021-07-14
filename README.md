@@ -7,3 +7,18 @@ Human knowledge of the world is often organized into systems of inter-related, m
 - [data_n_raw_wide.csv](Data/data_n_raw_wide.csv) contains 404 children's responses to the which-N task
 - [data_more_raw_wide.csv](Data/data_more_raw_wide.csv) contains 465 children's responses to the which-More task
 - xx children have recieved both tasks. 
+
+## Code/analysis files
+- [Data cleaning.md](Markdown/Data cleaning.md)
+This code cleans the raw N and More participants data:
+
+1. convert data from wide to long format
+2. delete NA items
+3. create a separate subj level accuracy column and use it to categorize children into 4 quartiles
+4. adding item feature information
+5. output the results into new csv files for further analysis 
+
+It also identifies children who had completed both tasks, by concatenating their "DOB, DOE, and location" and find common values both the n and more data.
+
+- [Analysis 1_Overall descriptive results.Rmd](Markdown/Analysis 1_Overall descriptive results.Rmd) 
+This code provides an overall view of children's performance in the two tasks. 
