@@ -1,18 +1,14 @@
----
-title: 'Analysis 1: Overall descriptive results'
-output: rmarkdown::github_document
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, results = 'hide', message=FALSE)
-```
+Analysis 1: Overall descriptive results
+================
 
 ## Overview
 
-This code provides an overall view of children's performance in the two tasks. 
+This code provides an overall view of children’s performance in the two
+tasks.
 
 ## Load libraries
-```{r}
+
+``` r
 library("here")
 library("tidyverse")
 library("afex")
@@ -23,11 +19,12 @@ library("janitor")
 
 setwd(here())
 ```
+
 ## Load data
 
 Compute subject level data for N and More separately, and combined
 
-```{r}
+``` r
 data_n_trial_level_raw = read.csv(here("Data/data_n_long.csv"), check.names = FALSE) 
 
 data_n_trial_level = data_n_trial_level_raw %>%
@@ -61,10 +58,11 @@ data_more_subj_level = data_more_trial_level %>%
 
 # if doing combined data set
 data_combined_subj_level = rbind(data_n_subj_level, data_more_subj_level)
-
 ```
+
 ## Demographic information
-```{r}
+
+``` r
 # Number of participants, complicated ---------------------
 # total number of completed, not total participants because some children received both tasks
 total_completed_tasks = nrow(data_combined_subj_level)
@@ -112,30 +110,41 @@ subj_all %>%
 ```
 
 ## Inspect missing values
-```{r}
+
+``` r
 # visualize missing values
 data_combined_subj_level %>%
   missing_plot()
+```
 
+![](Analysis-1_Overall-descriptive-results_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+``` r
 # Check for associations between missing and observed data
 explanatory = c("age_months", "sex", "ses", "location")
 dependent = c("acc_subj")
 
 data_combined_subj_level %>% 
   missing_pairs(dependent, explanatory)
-
-# report missing values in demographic info
-
 ```
-## model: acc_subj ~ age + sex + location
-```{r}
+
+![](Analysis-1_Overall-descriptive-results_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
+
+``` r
+# report missing values in demographic info
+```
+
+## model: acc\_subj \~ age + sex + location
+
+``` r
 model = lm(acc_subj ~ age_months + task + sex + location, data = data_combined_subj_level)
 summary(model)
 anova(model)
 ```
 
 ## Plots
-```{r}
+
+``` r
 fontsize = 13
 
 # scatter plot: Accuracy is linearly related to age, but no sex difference
@@ -151,7 +160,11 @@ ggplot(data = data_combined_subj_level, aes(x = age_months, y = acc_subj, color 
   labs(color = "Sex") +
   theme(plot.title = element_text(size = fontsize, hjust = 0.5), text=element_text(size=fontsize)) +
   scale_color_manual(values = c("lightcoral", "cyan3","grey72"))
+```
 
+![](Analysis-1_Overall-descriptive-results_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+``` r
 fig = here("Plots", "descriptive", "scatterplot_acc_by_age_gender.jpeg")
 ggsave(fig, height = 4, width = 6, dpi = 300)
 
@@ -167,7 +180,11 @@ ggplot(data_combined_subj_level, aes(x = reorder(location, acc_subj), y = acc_su
   theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                      panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) + 
   theme(plot.title = element_text(size = fontsize, hjust = 0.5), text=element_text(size=fontsize), legend.position = "none", axis.text.y = element_text(size = 0))
-  
+```
+
+![](Analysis-1_Overall-descriptive-results_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
+
+``` r
 fig = here("Plots", "descriptive", "acc_by_school.jpeg")
 ggsave(fig, height = 4, width = 4.5, dpi = 300)
 
@@ -178,12 +195,17 @@ ggplot(data_combined_subj_level, aes(x = acc_subj, fill = task)) +
   ylab("Density") +
   scale_fill_discrete(name = "Task", labels = c("More", "N")) +
   theme_classic(base_size = 13)
+```
 
+![](Analysis-1_Overall-descriptive-results_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->
+
+``` r
 fig = here("Plots", "descriptive", "acc_by_task.jpeg")
 ggsave(fig, height = 4, width = 6, dpi = 300)
 ```
-## The effect of some features (i.e., length_diff, transposition)
-```{r}
-data_combined_trial_level = rbind(data_n_trial_level_raw, data_more_trial_level_raw)
 
+## The effect of some features (i.e., length\_diff, transposition)
+
+``` r
+data_combined_trial_level = rbind(data_n_trial_level_raw, data_more_trial_level_raw)
 ```
