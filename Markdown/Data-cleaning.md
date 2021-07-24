@@ -34,6 +34,7 @@ The critical output files for further analyses are:
 ``` r
 library("here")
 library("tidyverse")
+library("janitor")
 ```
 
 ## For the N task
@@ -42,6 +43,27 @@ library("tidyverse")
 # load input data
 data_subj <- read.csv(here("Data", "data_n_raw_wide.csv"), check.names = FALSE)
 data_item <- read.csv(here("Data", "data_n_item.csv"), check.names = FALSE)
+
+# age group distribution and exclusion
+hist(data_subj$age_months)
+```
+
+![](Data-cleaning_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+``` r
+data_subj = data_subj %>%
+  filter(age_months < 90) # exclude one child who is almost 8
+
+# create a new id (within_id = paste(dob, doe, sex, location) to find twins
+data_subj = data_subj %>%
+  mutate(within_id = paste(dob, doe, sex, location))
+
+twins = data_subj %>%
+  get_dupes(within_id)
+
+# flag twins, will not be considered for the within-subject analysis, because there is no way to link one twin's N data to More data  
+data_subj = data_subj %>%
+  mutate(twins = ifelse(within_id %in% twins$within_id, "y", "n"))
 
 # cleaning
 data_cleaned <- data_subj %>%
@@ -63,7 +85,7 @@ data_quartile <- data_subj %>%
 data_cleaned <- data_cleaned %>%
   left_join(data_quartile, by = "id") %>%
   left_join(data_item, by = "item") %>%
-  mutate(within_id = paste(dob, doe, sex, location)) # create a column for within subject id
+  mutate(age_years_group = floor(age_months/12))
 
 # output the cleaned data
 write.csv(data_cleaned, here("Data/data_n_long.csv"), row.names = FALSE)
@@ -75,6 +97,27 @@ write.csv(data_cleaned, here("Data/data_n_long.csv"), row.names = FALSE)
 # load input data
 data_subj <- read.csv(here("Data", "data_more_raw_wide.csv"), check.names = FALSE)
 data_item <- read.csv(here("Data", "data_more_item.csv"), check.names = FALSE)
+
+# age group distribution and exclusion
+hist(data_subj$age_months)
+```
+
+![](Data-cleaning_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+``` r
+data_subj = data_subj %>%
+  filter(age_months < 90) # exclude one child who is almost 8
+
+# create a new id (within_id = paste(dob, doe, sex, location) to find twins
+data_subj = data_subj %>%
+  mutate(within_id = paste(dob, doe, sex, location))
+
+twins = data_subj %>%
+  get_dupes(within_id)
+
+# flag twins, will not be considered for the within-subject analysis, because there is no way to link one twin's N data to More data  
+data_subj = data_subj %>%
+  mutate(twins = ifelse(within_id %in% twins$within_id, "y", "n"))
 
 # cleaning
 data_cleaned <- data_subj %>%
@@ -96,7 +139,7 @@ data_quartile <- data_subj %>%
 data_cleaned <- data_cleaned %>%
   left_join(data_quartile, by = "id") %>%
   left_join(data_item, by = "item") %>%
-  mutate(within_id = paste(dob, doe, sex, location)) # create a column for within subject id
+  mutate(age_years_group = floor(age_months/12))
 
 # output the cleaned data
 write.csv(data_cleaned, here("Data/data_more_long.csv"), row.names = FALSE)
@@ -106,15 +149,43 @@ write.csv(data_cleaned, here("Data/data_more_long.csv"), row.names = FALSE)
 
 ``` r
 data_more_long_ids <- read.csv(here("Data/data_more_long.csv"), check.names = FALSE) %>%
+  filter(twins == "n") %>% # don't consider twins for the within-subject analysis, because there is no way to link one twin's N data to More data  
   distinct(within_id)
+data_more_long_data <- read.csv(here("Data/data_more_long.csv"), check.names = FALSE)
 
 data_n_long_ids <- read.csv(here("Data/data_n_long.csv"), check.names = FALSE) %>%
-  distinct(within_id) # there were twins in the which n data, but we can not decide which more task goes with which twin, so delete all 5 sets of twins.
+  filter(twins == "n") %>%
+  distinct(within_id) 
+data_n_long_data <- read.csv(here("Data/data_n_long.csv"), check.names = FALSE)
 
+# identify ids that are present at both the N and More tasks
 all_within_ids <- inner_join(data_more_long_ids, data_n_long_ids, by = "within_id", all = TRUE) # find children who did both tasks
 
-# output these ids in a csv file
+# create a new trial-level dataset for children who recieved both tasks 
+data_more_long_within_data = data_more_long_data %>%
+  filter(within_id %in% all_within_ids$within_id) %>%
+  mutate(task = "More")
+
+data_n_long_within_data = data_n_long_data %>%
+  filter(within_id %in% all_within_ids$within_id) %>%
+  mutate(task = "N")
+
+all_within_data = rbind(data_more_long_within_data, data_n_long_within_data)
+
+# output new csv files
 write.csv(all_within_ids, here("Data/data_within_ids.csv"), row.names = F)
+write.csv(all_within_data, here("Data/data_within_data.csv"), row.names = F)
+
+# mark in the original files how many tasks that each participant have participated
+data_n_long_data = data_n_long_data %>%
+  mutate(completed_task = ifelse(within_id %in% all_within_ids$within_id, 2, 1))
+  
+data_more_long_data = data_more_long_data %>%
+  mutate(completed_task = ifelse(within_id %in% all_within_ids$within_id, 2, 1))
+
+# revise the trial level long data from earlier, and save new files that contain the number of completed tasks
+write.csv(data_n_long_data, here("Data/data_n_long.csv"), row.names = FALSE)
+write.csv(data_more_long_data, here("Data/data_more_long.csv"), row.names = FALSE)
 ```
 
 ## Generate binominal test results for each items and each quartile

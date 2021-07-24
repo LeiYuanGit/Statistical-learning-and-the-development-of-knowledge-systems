@@ -34,7 +34,7 @@ data = read.csv(here("Data/data_n_long.csv"),header=TRUE,sep=",", check.names = 
 str(data)
 ```
 
-    ## 'data.frame':    6188 obs. of  31 variables:
+    ## 'data.frame':    6178 obs. of  33 variables:
     ##  $ excel_file_name          : chr  "Meap 3 Data only/sheet: combined data" "Meap 3 Data only/sheet: combined data" "Meap 3 Data only/sheet: combined data" "Meap 3 Data only/sheet: combined data" ...
     ##  $ id                       : int  31 32 33 34 35 36 37 38 39 40 ...
     ##  $ sex                      : chr  NA NA NA NA ...
@@ -46,6 +46,8 @@ str(data)
     ##  $ location                 : chr  "KA" "KA" "KA" "KA" ...
     ##  $ percentage_correct       : num  0.562 0.375 0.438 0.625 0.75 ...
     ##  $ ses                      : int  1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ within_id                : chr  "9/19/10 5/22/13 NA KA" "5/6/10 5/21/13 NA KA" "12/10/09 5/21/13 NA KA" "11/8/09 5/21/13 NA KA" ...
+    ##  $ twins                    : chr  "n" "n" "n" "n" ...
     ##  $ item                     : chr  "2 v 8" "2 v 8" "2 v 8" "2 v 8" ...
     ##  $ acc                      : int  1 1 1 1 1 1 1 1 1 1 ...
     ##  $ subj_acc                 : num  0.562 0.375 0.438 0.625 0.75 ...
@@ -65,7 +67,7 @@ str(data)
     ##  $ item_comparison_unordered: chr  "single_single" "single_single" "single_single" "single_single" ...
     ##  $ item_comparison          : chr  "single_single" "single_single" "single_single" "single_single" ...
     ##  $ item_type                : chr  "Neither" "Neither" "Neither" "Neither" ...
-    ##  $ within_id                : chr  "9/19/10 5/22/13 NA KA" "5/6/10 5/21/13 NA KA" "12/10/09 5/21/13 NA KA" "11/8/09 5/21/13 NA KA" ...
+    ##  $ completed_task           : int  2 2 2 2 2 2 2 2 1 1 ...
 
 ``` r
 head(data) 
@@ -78,41 +80,48 @@ head(data)
     ## 4 Meap 3 Data only/sheet: combined data 34 <NA>  11/8/09 5/21/13         42
     ## 5 Meap 3 Data only/sheet: combined data 35 <NA>  9/20/09 5/22/13         44
     ## 6 Meap 3 Data only/sheet: combined data 36 <NA>  5/28/09 5/21/13         48
-    ##   age_years age_years_group location percentage_correct ses  item acc subj_acc
-    ## 1       2.7               2       KA               0.56   1 2 v 8   1     0.56
-    ## 2       3.0               3       KA               0.38   1 2 v 8   1     0.38
-    ## 3       3.5               3       KA               0.44   1 2 v 8   1     0.44
-    ## 4       3.5               3       KA               0.62   1 2 v 8   1     0.62
-    ## 5       3.7               3       KA               0.75   1 2 v 8   1     0.75
-    ## 6       4.0               3       KA               0.62   1 2 v 8   1     0.62
-    ##   quartile bigger_places places length_diff one_digit_diff_not_zero
-    ## 1        1             1    1v1           n                       y
-    ## 2        1             1    1v1           n                       y
-    ## 3        1             1    1v1           n                       y
-    ## 4        2             1    1v1           n                       y
-    ## 5        2             1    1v1           n                       y
-    ## 6        2             1    1v1           n                       y
-    ##   transposition inserting_zero e3_categories category left_num right_num
-    ## 1             n              n        single        S        2         8
-    ## 2             n              n        single        S        2         8
-    ## 3             n              n        single        S        2         8
-    ## 4             n              n        single        S        2         8
-    ## 5             n              n        single        S        2         8
-    ## 6             n              n        single        S        2         8
-    ##   left_number_range right_number_range item_comparison_unordered
-    ## 1            single             single             single_single
-    ## 2            single             single             single_single
-    ## 3            single             single             single_single
-    ## 4            single             single             single_single
-    ## 5            single             single             single_single
-    ## 6            single             single             single_single
-    ##   item_comparison item_type              within_id
-    ## 1   single_single   Neither  9/19/10 5/22/13 NA KA
-    ## 2   single_single   Neither   5/6/10 5/21/13 NA KA
-    ## 3   single_single   Neither 12/10/09 5/21/13 NA KA
-    ## 4   single_single   Neither  11/8/09 5/21/13 NA KA
-    ## 5   single_single   Neither  9/20/09 5/22/13 NA KA
-    ## 6   single_single   Neither  5/28/09 5/21/13 NA KA
+    ##   age_years age_years_group location percentage_correct ses
+    ## 1       2.7               2       KA               0.56   1
+    ## 2       3.0               3       KA               0.38   1
+    ## 3       3.5               3       KA               0.44   1
+    ## 4       3.5               3       KA               0.62   1
+    ## 5       3.7               3       KA               0.75   1
+    ## 6       4.0               3       KA               0.62   1
+    ##                within_id twins  item acc subj_acc quartile bigger_places places
+    ## 1  9/19/10 5/22/13 NA KA     n 2 v 8   1     0.56        1             1    1v1
+    ## 2   5/6/10 5/21/13 NA KA     n 2 v 8   1     0.38        1             1    1v1
+    ## 3 12/10/09 5/21/13 NA KA     n 2 v 8   1     0.44        1             1    1v1
+    ## 4  11/8/09 5/21/13 NA KA     n 2 v 8   1     0.62        2             1    1v1
+    ## 5  9/20/09 5/22/13 NA KA     n 2 v 8   1     0.75        2             1    1v1
+    ## 6  5/28/09 5/21/13 NA KA     n 2 v 8   1     0.62        2             1    1v1
+    ##   length_diff one_digit_diff_not_zero transposition inserting_zero
+    ## 1           n                       y             n              n
+    ## 2           n                       y             n              n
+    ## 3           n                       y             n              n
+    ## 4           n                       y             n              n
+    ## 5           n                       y             n              n
+    ## 6           n                       y             n              n
+    ##   e3_categories category left_num right_num left_number_range
+    ## 1        single        S        2         8            single
+    ## 2        single        S        2         8            single
+    ## 3        single        S        2         8            single
+    ## 4        single        S        2         8            single
+    ## 5        single        S        2         8            single
+    ## 6        single        S        2         8            single
+    ##   right_number_range item_comparison_unordered item_comparison item_type
+    ## 1             single             single_single   single_single   Neither
+    ## 2             single             single_single   single_single   Neither
+    ## 3             single             single_single   single_single   Neither
+    ## 4             single             single_single   single_single   Neither
+    ## 5             single             single_single   single_single   Neither
+    ## 6             single             single_single   single_single   Neither
+    ##   completed_task
+    ## 1              2
+    ## 2              2
+    ## 3              2
+    ## 4              2
+    ## 5              2
+    ## 6              2
 
 ### Step 2:
 
@@ -215,16 +224,16 @@ data_item_type_summary
     ## 31              245
     ## 32               32
     ## 33              167
-    ## 34              249
-    ## 35              350
+    ## 34              247
+    ## 35              347
     ## 36               23
     ## 37               67
     ## 38              142
-    ## 39              101
-    ## 40              194
-    ## 41              101
+    ## 39              100
+    ## 40              193
+    ## 41              100
     ## 42               23
-    ## 43              251
+    ## 43              249
     ## 44               23
     ## 45              136
 
@@ -438,13 +447,13 @@ item_category_count
     ## 79                32 0.66
     ## 80                32 0.88
     ## 81                32 0.69
-    ## 82                78 0.99
-    ## 83               101 1.00
+    ## 82                77 0.99
+    ## 83               100 1.00
     ## 84                70 1.00
-    ## 85                78 0.97
-    ## 86                78 0.97
+    ## 85                77 0.97
+    ## 86                77 0.97
     ## 87                93 0.99
-    ## 88                78 0.99
+    ## 88                77 0.99
     ## 89                23 1.00
     ## 90                23 0.74
     ## 91                44 1.00
@@ -453,14 +462,14 @@ item_category_count
     ## 94                93 1.00
     ## 95                23 1.00
     ## 96                93 1.00
-    ## 97               101 0.99
+    ## 97               100 0.99
     ## 98                93 1.00
-    ## 99               101 1.00
+    ## 99               100 1.00
     ## 100               23 1.00
     ## 101               26 0.92
     ## 102               23 1.00
-    ## 103               78 0.96
-    ## 104              101 0.98
+    ## 103               77 0.96
+    ## 104              100 0.98
     ## 105               23 1.00
     ## 106               23 1.00
     ## 107               44 0.95

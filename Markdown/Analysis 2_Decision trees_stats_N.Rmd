@@ -12,7 +12,7 @@ library(party)
 library(tidyverse)
 library(here)
 library(caret)
-library(partykit) 
+#library(partykit) 
 ```
 ## Load data (only need to change this for the More task analysis)
 ```{r}
@@ -23,6 +23,10 @@ task_name = "n"
 data_long = read.csv(here(paste0("Data/data_", task_name,"_long.csv")))
 
 data_tree_nodes = read.csv(here(paste0("Data/data_tree_nodes_",task_name,".csv")))
+
+data_tree_stats_help = read.csv(here(paste0("Data/data_", task_name, "_tree_stats_helper.csv")))
+
+data_item_binomial = read.csv(here(paste0("Data/data_", task_name, "_item_binomial.csv")))
 
 # within each quartile, some items don't have at least 10 children responses. exclude them from the item level accuracy graph, but not the overall analysis???
 min_item_n = 10
@@ -48,13 +52,19 @@ data_long = data_long %>%
 prediction_acc_results  = NULL  # save confusion matrix results for each tree
 data_long_terminal = NULL # save the terminal node number for each row (or trial), for plotting the item-level accuracy graphs for each quartile
 
+Analysis2_chisq_results = NULL
+
 set.seed(240)
 
 for (i in 1:4) {
   # get quartile data
   temp_data = subset(data_long, quartile == i) 
-  temp_inner_nodes = subset(data_tree_nodes, quartile == 1) %>%
-    filter(node_type == "inner")
+  temp_inner_nodes = subset(data_tree_nodes, quartile == i) %>%
+    filter(node_type == "inner") 
+  
+  temp_splits = subset(data_tree_stats_help, quartile == i)
+  temp_split_nodes = unique(temp_splits$split_node)
+  temp_split_nodes_num = length(temp_split_nodes)
   
   # grow ctree
   ct = ctree(factor(acc) ~ 
@@ -63,12 +73,48 @@ for (i in 1:4) {
   
   plot(ct)
   
+  # save tree node number to quartile data
+  a = where(ct)
+  temp_data_with_node_number = cbind(temp_data,a)
+  
   # loop through each inner node and computer the stats
-  for (j in 1:nrow(temp_inner_nodes)) {
+  for (j in 1:temp_split_nodes_num) {
+    temp_data = subset(temp_splits, split_node == temp_split_nodes[j])
     
+    left_nodes = na.omit(unique(subset(temp_splits, split_node == temp_split_nodes[j])$left_terminal))
+    left_data = temp_data_with_node_number %>%
+      filter(a %in% left_nodes) %>%
+      mutate(group = "left")
     
+    right_nodes = na.omit(unique(subset(temp_splits, split_node == temp_split_nodes[j])$right_terminal))
+    right_data = temp_data_with_node_number %>%
+      filter(a %in% right_nodes) %>%
+      mutate(group = "right")
+    
+   
+    left_acc = mean(left_data$acc)
+    right_acc = mean(right_data$acc)
+    
+    all_data = rbind(left_data, right_data)
+    chisq_results = chisq.test(all_data$group, all_data$acc)
+    
+    # retrieve features
+    feature = unique(subset(temp_splits, split_node == temp_split_nodes[j])$feature)
+    
+    left_feature_value = subset(temp_splits, split_node == temp_split_nodes[j]) %>%
+      filter(!is.na(left_terminal)) %>%
+      select(feature_value)
+    
+    right_feature_value = subset(temp_splits, split_node == temp_split_nodes[j]) %>%
+      filter(!is.na(right_terminal)) %>%
+      select(feature_value)
+    
+    # save the results
+    Analysis2_chisq_results_temp = data.frame("quartile" = i, "split" = temp_split_nodes[j], "left_acc" = left_acc, "right_acc" = right_acc,"chisq_value" = chisq_results$statistic, "chisq_df" = chisq_results$parameter, "chisq_p" = chisq_results$p.value, "feature" = feature, "left_feature_value" = unique(left_feature_value$feature_value), "right_feature_value" = unique(right_feature_value$feature_value))
+    
+    Analysis2_chisq_results = rbind(Analysis2_chisq_results, Analysis2_chisq_results_temp)
   }
-  
-  
 }
+
+write.csv(Analysis2_chisq_results, here("Data/Analysis2_chisq_results.csv"), row.names = FALSE)
 ```

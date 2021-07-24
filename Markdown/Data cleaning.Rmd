@@ -75,7 +75,8 @@ data_quartile <- data_subj %>%
 # adding quartile and item feature information to the raw data
 data_cleaned <- data_cleaned %>%
   left_join(data_quartile, by = "id") %>%
-  left_join(data_item, by = "item") 
+  left_join(data_item, by = "item") %>%
+  mutate(age_years_group = floor(age_months/12))
 
 # output the cleaned data
 write.csv(data_cleaned, here("Data/data_n_long.csv"), row.names = FALSE)
@@ -122,7 +123,8 @@ data_quartile <- data_subj %>%
 # adding quartile and item feature information to the raw data
 data_cleaned <- data_cleaned %>%
   left_join(data_quartile, by = "id") %>%
-  left_join(data_item, by = "item")
+  left_join(data_item, by = "item") %>%
+  mutate(age_years_group = floor(age_months/12))
 
 # output the cleaned data
 write.csv(data_cleaned, here("Data/data_more_long.csv"), row.names = FALSE)

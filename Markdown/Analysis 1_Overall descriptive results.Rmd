@@ -4,7 +4,7 @@ output: rmarkdown::github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, results = 'hide', message=FALSE)
+knitr::opts_chunk$set(echo = TRUE, message=FALSE)
 ```
 
 ## Overview
@@ -17,8 +17,6 @@ library("here")
 library("tidyverse")
 library("afex")
 library("lme4")
-library("finalfit")
-library("psych")
 library("janitor")
 
 setwd(here())
@@ -31,18 +29,18 @@ Compute subject level data for N and More separately, and combined
 data_n_trial_level_raw = read.csv(here("Data/data_n_long.csv"), check.names = FALSE) 
 
 data_n_trial_level = data_n_trial_level_raw %>%
-  select(id, sex, ses, age_months, location, acc, completed_task, within_id) %>%
+  select(id, sex, ses, age_months, location, acc, completed_task, within_id, age_years_group) %>%
   mutate(task = "N")
 
 data_more_trial_level_raw = read.csv(here("Data/data_more_long.csv"), check.names = FALSE) 
 
 data_more_trial_level = data_more_trial_level_raw %>%
-  select(id, sex, ses, age_months, location, acc, completed_task, within_id) %>%
+  select(id, sex, ses, age_months, location, acc, completed_task, within_id, age_years_group) %>%
   mutate(task = "More")
 
 # Getting subj level data
 data_n_subj_level = data_n_trial_level %>%
-  group_by(id, age_months, sex, ses, location, task, completed_task, within_id) %>%
+  group_by(id, age_months, sex, ses, location, task, completed_task, within_id, age_years_group) %>%
   summarise(acc_subj = mean(acc)) %>%
   mutate(sex = as.factor(sex),
          ses = as.factor(ses),
@@ -51,7 +49,7 @@ data_n_subj_level = data_n_trial_level %>%
   data.frame()
 
 data_more_subj_level = data_more_trial_level %>%
-  group_by(id, age_months, sex, ses, location, task, completed_task, within_id) %>%
+  group_by(id, age_months, sex, ses, location, task, completed_task, within_id, age_years_group) %>%
   summarise(acc_subj = mean(acc)) %>%
   mutate(sex = as.factor(sex),
          ses = as.factor(ses),
@@ -68,9 +66,11 @@ data_combined_subj_level = rbind(data_n_subj_level, data_more_subj_level)
 # Number of participants, complicated ---------------------
 # total number of completed, not total participants because some children received both tasks
 total_completed_tasks = nrow(data_combined_subj_level)
+total_completed_tasks
 
 # total number of trials/observations
-total_n_trials = nrow(data_n_trial_level) + nrow(data_more_trial_level)
+total_num_trials = nrow(data_n_trial_level) + nrow(data_more_trial_level)
+total_num_trials
 
 # number of children who received both tasks
 data_within_data_subj_level = read.csv(here("Data/data_within_data.csv"), check.names = FALSE) %>%
@@ -79,22 +79,25 @@ data_within_data_subj_level = read.csv(here("Data/data_within_data.csv"), check.
   ungroup()
 
 total_both_tasks = nrow(data_within_data_subj_level)
+total_both_tasks
 
 # number of children who only received one task
 total_one_task = total_completed_tasks - nrow(data_within_data_subj_level) * 2
+total_one_task
 
 # total number of participants 
 total_participants = total_both_tasks + total_one_task
+total_participants
 
 # Participants' demographic info ------------------
 # identify children who only received one task
 subj_one_task = data_combined_subj_level %>%
   filter(completed_task == 1) %>%
-  select(within_id, age_months, sex, location)
+  select(within_id, age_months, sex, location, age_years_group)
 
 subj_two_tasks = data_combined_subj_level %>%
   filter(completed_task == 2) %>%
-  group_by(within_id, age_months, sex, location) %>%
+  group_by(within_id, age_months, sex, location, age_years_group) %>%
   summarise(n = n()) %>%
   select(-n)
 
@@ -107,27 +110,13 @@ subj_all %>%
   tabyl(sex)
 
 subj_all %>%
+  tabyl(age_years_group)
+
+subj_all %>%
   mutate(tested_in_school = ifelse(location == "Lab", "y", "n")) %>%
   tabyl(tested_in_school)
 ```
-
-## Inspect missing values
-```{r}
-# visualize missing values
-data_combined_subj_level %>%
-  missing_plot()
-
-# Check for associations between missing and observed data
-explanatory = c("age_months", "sex", "ses", "location")
-dependent = c("acc_subj")
-
-data_combined_subj_level %>% 
-  missing_pairs(dependent, explanatory)
-
-# report missing values in demographic info
-
-```
-## model: acc_subj ~ age + sex + location
+## model: acc_subj ~ age + sex + task + location
 ```{r}
 model = lm(acc_subj ~ age_months + task + sex + location, data = data_combined_subj_level)
 summary(model)

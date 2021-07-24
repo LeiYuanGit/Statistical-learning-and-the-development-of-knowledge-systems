@@ -23,7 +23,7 @@ library(caret)
 # CHAID package is not on CRAN, so special install 
 #install.packages("CHAID", repos="http://R-Forge.R-project.org")
 #library(CHAID)
-library(partykit) # partykit is only required by CHAID
+# library(partykit) # partykit is only required by CHAID. DO NOT use it to generate the original trees
 #detach("package:partykit", unload=TRUE) # detach is loaded 
 
 ```
