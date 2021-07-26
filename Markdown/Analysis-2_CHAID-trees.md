@@ -1,4 +1,4 @@
-Analysis 2\_CHAID trees\_N\_M
+Analysis 2\_CHAID trees
 ================
 
 ## R Markdown
@@ -86,7 +86,7 @@ for (i in 1:4) {
 }
 ```
 
-![](Analysis-2_CHAID-trees_N_M_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->![](Analysis-2_CHAID-trees_N_M_files/figure-gfm/unnamed-chunk-1-2.png)<!-- -->![](Analysis-2_CHAID-trees_N_M_files/figure-gfm/unnamed-chunk-1-3.png)<!-- -->![](Analysis-2_CHAID-trees_N_M_files/figure-gfm/unnamed-chunk-1-4.png)<!-- -->
+![](Analysis-2_CHAID-trees_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->![](Analysis-2_CHAID-trees_files/figure-gfm/unnamed-chunk-1-2.png)<!-- -->![](Analysis-2_CHAID-trees_files/figure-gfm/unnamed-chunk-1-3.png)<!-- -->![](Analysis-2_CHAID-trees_files/figure-gfm/unnamed-chunk-1-4.png)<!-- -->
 \#\# For the M task
 
 Plot for the M task
@@ -131,4 +131,4 @@ for (i in 1:4) {
 }
 ```
 
-![](Analysis-2_CHAID-trees_N_M_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->![](Analysis-2_CHAID-trees_N_M_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->![](Analysis-2_CHAID-trees_N_M_files/figure-gfm/unnamed-chunk-2-3.png)<!-- -->![](Analysis-2_CHAID-trees_N_M_files/figure-gfm/unnamed-chunk-2-4.png)<!-- -->
+![](Analysis-2_CHAID-trees_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->![](Analysis-2_CHAID-trees_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->![](Analysis-2_CHAID-trees_files/figure-gfm/unnamed-chunk-2-3.png)<!-- -->![](Analysis-2_CHAID-trees_files/figure-gfm/unnamed-chunk-2-4.png)<!-- -->
