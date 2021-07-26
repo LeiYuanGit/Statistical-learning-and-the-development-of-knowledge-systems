@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This code generates a decision tree per quartile for the which N task.
 
-It also saves 
+It also generate a graph showing the individual trial performance for each of the terminal.
 
 ## Load libraries & data
 ```{r}

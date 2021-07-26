@@ -1,0 +1,57 @@
+---
+title: "Analysis_3_Network_stats"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Overview
+
+This code reads in the network measures derived from the last code and generate graphs to show 
+
+1. the growth of the global centrality measures of the which-N and which-More networks 
+
+2. the difference in the growth of individual nodes in the two networks.  
+
+## plot network measures of the two tasks togtheter for ease of comparison
+```{r}
+# load both N and More network measures from file
+n_measures = read.csv(here("Data/data_n_network_measures.csv")) %>%
+  mutate(task = "Which-N")
+
+more_measures = read.csv(here("Data/data_more_network_measures.csv")) %>%
+  mutate(task = "Which-More")
+
+# plot global centralitiy measures
+network_stat_long = rbind(n_measures, more_measures) %>%
+  group_by(task, quartile) %>%
+  summarise(density = mean(density), diameter = mean(diameter), degree = mean(degree)) %>%
+  gather(key = "measure", value = "value", c("density":"degree")) %>%
+  mutate(quartile = as.factor(quartile),
+         value = round(value, 3)) %>%
+  as.data.frame() %>%
+  mutate(task = factor(task, levels = c("Which-N", "Which-More")))
+
+ggplot(data = network_stat_long, aes(x = quartile, y = value, group = 1)) +
+  geom_line() +
+  facet_wrap(~task + measure, scales = "free") +
+  theme_classic()
+
+ggsave(here(paste0("Plots/n_more_network_centrality_measures.jpeg")), width = 6, height = 4, dpi = 300)
+
+# plot degree of individual nodes
+temp_degree = rbind(n_measures, more_measures) %>%
+  select(task, node_name, quartile, degree) %>%
+  mutate(task, node_name = factor(node_name, levels = c("single", "teen", "decade", "hundred", "thousand"))) %>%
+  mutate(task = factor(task, levels = c("Which-N", "Which-More")))
+
+ggplot(temp_degree, aes(x = quartile, y = degree)) +
+  geom_line(aes(group = node_name, color=node_name), size=2, alpha=0.4) +
+  facet_wrap(~task, scales = "free", ncol = 1) +
+  theme_classic()
+
+ggsave(here(paste0("Plots/n_more_network_nodes_degree.jpeg")), width = 6, height = 4, dpi = 300)
+
+```

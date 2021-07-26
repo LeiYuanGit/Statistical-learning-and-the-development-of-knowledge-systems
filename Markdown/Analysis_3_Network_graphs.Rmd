@@ -150,46 +150,7 @@ write.csv(network_stat, here(paste0("Data/data_", task, "_network_measures.csv")
 ![Quartile 3 network graph for the N task](../Plots/network_n_q3.jpg){width=70%}
 
 ![Quartile 4 network graph for the N task](../Plots/network_n_q4.jpg){width=70%}
-## plot network measures of the two tasks togtheter for ease of comparison
-```{r}
-# load both N and More network measures from file
-n_measures = read.csv(here("Data/data_n_network_measures.csv")) %>%
-  mutate(task = "Which-N")
 
-more_measures = read.csv(here("Data/data_more_network_measures.csv")) %>%
-  mutate(task = "Which-More")
-
-# plot global centralitiy measures
-network_stat_long = rbind(n_measures, more_measures) %>%
-  group_by(task, quartile) %>%
-  summarise(density = mean(density), diameter = mean(diameter), degree = mean(degree)) %>%
-  gather(key = "measure", value = "value", c("density":"degree")) %>%
-  mutate(quartile = as.factor(quartile),
-         value = round(value, 3)) %>%
-  as.data.frame() %>%
-  mutate(task = factor(task, levels = c("Which-N", "Which-More")))
-
-ggplot(data = network_stat_long, aes(x = quartile, y = value, group = 1)) +
-  geom_line() +
-  facet_wrap(~task + measure, scales = "free") +
-  theme_classic()
-
-ggsave(here(paste0("Plots/n_more_network_centrality_measures.jpeg")), width = 6, height = 4, dpi = 300)
-
-# plot degree of individual nodes
-temp_degree = rbind(n_measures, more_measures) %>%
-  select(task, node_name, quartile, degree) %>%
-  mutate(task, node_name = factor(node_name, levels = c("single", "teen", "decade", "hundred", "thousand"))) %>%
-  mutate(task = factor(task, levels = c("Which-N", "Which-More")))
-
-ggplot(temp_degree, aes(x = quartile, y = degree)) +
-  geom_line(aes(group = node_name, color=node_name), size=2, alpha=0.4) +
-  facet_wrap(~task, scales = "free", ncol = 1) +
-  theme_classic()
-
-ggsave(here(paste0("Plots/n_more_network_nodes_degree.jpeg")), width = 6, height = 4, dpi = 300)
-
-```
 ## plot network measures individually, don't refer this, but keep for now
 ```{r}
 network_stat_long = network_stat %>%
