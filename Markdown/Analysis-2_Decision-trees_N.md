@@ -1,37 +1,88 @@
----
-title: 'Analysis 2: Decision trees_N'
-output: rmarkdown::github_document
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+Analysis 2: Decision trees\_N
+================
 
 ## Overview
 
-This code generates 
+This code generates
 
-1. a decision tree per quartile for the which N (or More) task.
+1.  a decision tree per quartile for the which N (or More) task.
 
-2. a series of graphs showing the individual trial performance for each of the terminal for each decision tree.
+2.  a series of graphs showing the individual trial performance for each
+    of the terminal for each decision tree.
 
 ## Load libraries & data
-```{r}
-library(party)
-library(tidyverse)
-library(here)
-library(caret)
 
+``` r
+library(party)
+```
+
+    ## Loading required package: grid
+
+    ## Loading required package: mvtnorm
+
+    ## Loading required package: modeltools
+
+    ## Loading required package: stats4
+
+    ## Loading required package: strucchange
+
+    ## Loading required package: zoo
+
+    ## 
+    ## Attaching package: 'zoo'
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     as.Date, as.Date.numeric
+
+    ## Loading required package: sandwich
+
+``` r
+library(tidyverse)
+```
+
+    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+
+    ## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+    ## ✓ tibble  3.1.2     ✓ dplyr   1.0.6
+    ## ✓ tidyr   1.1.3     ✓ stringr 1.4.0
+    ## ✓ readr   1.4.0     ✓ forcats 0.5.1
+
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## x stringr::boundary() masks strucchange::boundary()
+    ## x dplyr::filter()     masks stats::filter()
+    ## x dplyr::lag()        masks stats::lag()
+
+``` r
+library(here)
+```
+
+    ## here() starts at /Users/leyu6965/Dropbox/GitHub/Statistical-learning-and-the-development-of-knowledge-systems
+
+``` r
+library(caret)
+```
+
+    ## Loading required package: lattice
+
+    ## 
+    ## Attaching package: 'caret'
+
+    ## The following object is masked from 'package:purrr':
+    ## 
+    ##     lift
+
+``` r
 # CHAID package is not on CRAN, so special install 
 #install.packages("CHAID", repos="http://R-Forge.R-project.org")
 #library(CHAID)
 # library(partykit) # partykit is only required by CHAID. DO NOT use it to generate the original trees
 #detach("package:partykit", unload=TRUE) # detach is loaded 
-
 ```
 
 ## Load data (only need to change this for the More task analysis)
-```{r}
+
+``` r
 # indicate the task name, make it easier for adopting the same code for both the N and M tasks
 task_name = "n"
 #task_name = "more"
@@ -49,7 +100,8 @@ data_item_binomial = data_item_binomial %>%
 ```
 
 ## Grow Ctrees
-```{r}
+
+``` r
 set.seed(240)
 
 # make sure that all feature cols are factors
@@ -113,18 +165,22 @@ write.csv(prediction_acc_results, here(paste0("Data/", task_name, "ctree_model_a
 # current_weight = current_node[[1]]$weights
 # test = cbind(temp_data, current_weight) %>%
 #  select(places, current_weight)
-
 ```
 
-## Getting more terminal overall performance and item graphs 
-```{r}
+## Getting more terminal overall performance and item graphs
+
+``` r
 # Summarize terminal nodes overall accuracy
 data_terminal_summary = data_long_terminal %>%
   group_by(quartile, terminal_node) %>%
   summarise(acc_terminal = mean(acc), total_n = n(), success_n = sum(acc)) %>%
   rowwise() %>%
   mutate(binomial_p = round(binom.test(success_n, total_n, 0.5)$p.value, 4))
+```
 
+    ## `summarise()` has grouped output by 'quartile'. You can override using the `.groups` argument.
+
+``` r
 # select items in different terminals and link it to binomial test results file to generate the item accuracy graph for each terminal
 data_long_terminal_shortened = data_long_terminal %>% # extract only useful info: quartile_item, and terminal node number
   group_by(quartile, item, terminal_node) %>%
@@ -133,7 +189,11 @@ data_long_terminal_shortened = data_long_terminal %>% # extract only useful info
   mutate(quartile_item = paste(quartile, item)) %>% # create a unique key to be linked to the binomial data
   ungroup() %>%
   select(quartile_item, terminal_node)
+```
 
+    ## `summarise()` has grouped output by 'quartile', 'item'. You can override using the `.groups` argument.
+
+``` r
 # read in item by quartile binomial result data and combine with terminal node number
 data_item_binomial_terminal = data_item_binomial %>%
   mutate(quartile_item = paste(quartile, item)) %>%
@@ -189,5 +249,4 @@ for (i in 1:4) {
     ggsave(loc_file, height = 3.5, width = 2, dpi = 300, limitsize = FALSE)
   }
 }
-
 ```

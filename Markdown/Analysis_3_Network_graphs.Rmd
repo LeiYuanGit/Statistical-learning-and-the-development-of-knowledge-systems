@@ -151,100 +151,100 @@ write.csv(network_stat, here(paste0("Data/data_", task, "_network_measures.csv")
 
 ![Quartile 4 network graph for the N task](../Plots/network_n_q4.jpg){width=70%}
 
-## plot network measures individually, don't refer this, but keep for now
+## plot network measures individually, don't want this, but keep for now in case co-author is interested
 ```{r}
-network_stat_long = network_stat %>%
-  group_by(quartile) %>%
-  summarise(density = mean(density), diameter = mean(diameter), degree = mean(degree), modularity = mean(modularity)) %>%
-  gather(key = "measure", value = "value", c("density":"modularity")) %>%
-  mutate(quartile = as.factor(quartile),
-         value = round(value, 3)) %>%
-  as.data.frame()
-
-ggplot(data = network_stat_long, aes(x = quartile, y = value, group = 1)) +
-  geom_line() +
-  facet_wrap(~measure, scales = "free") 
-
-ggsave(here(paste0("Plots/", task, "_network_stats.jpeg")), width = 6, height = 4, dpi = 300)
-
-# individual node analysis
-# closeness
-temp_closeness = network_stat %>%
-  select(node_name, quartile, closeness) %>%
-  mutate(node_name = factor(node_name, levels = c("single", "teen", "decade", "hundred", "thousand")))
-  
-
-ggplot(temp_closeness, aes(x = quartile, y = closeness, fill = node_name)) +
-  geom_bar(stat = "identity", position = position_dodge())
-
-ggsave(here(paste0("Plots/", task, "_network_stats_closeness.jpeg")), width = 6, height = 4, dpi = 300)
-
-# degree
-temp_degree = network_stat %>%
-  select(node_name, quartile, degree) %>%
-  mutate(node_name = factor(node_name, levels = c("single", "teen", "decade", "hundred", "thousand")))
-  
-
-ggplot(temp_degree, aes(x = quartile, y = degree, fill = node_name)) +
-  geom_bar(stat = "identity", position = position_dodge())
-
-ggsave(here(paste0("Plots/", task, "_network_stats_degree.jpeg")), width = 6, height = 4, dpi = 300)
+# network_stat_long = network_stat %>%
+#   group_by(quartile) %>%
+#   summarise(density = mean(density), diameter = mean(diameter), degree = mean(degree), modularity = mean(modularity)) %>%
+#   gather(key = "measure", value = "value", c("density":"modularity")) %>%
+#   mutate(quartile = as.factor(quartile),
+#          value = round(value, 3)) %>%
+#   as.data.frame()
+# 
+# ggplot(data = network_stat_long, aes(x = quartile, y = value, group = 1)) +
+#   geom_line() +
+#   facet_wrap(~measure, scales = "free") 
+# 
+# ggsave(here(paste0("Plots/", task, "_network_stats.jpeg")), width = 6, height = 4, dpi = 300)
+# 
+# # individual node analysis
+# # closeness
+# temp_closeness = network_stat %>%
+#   select(node_name, quartile, closeness) %>%
+#   mutate(node_name = factor(node_name, levels = c("single", "teen", "decade", "hundred", "thousand")))
+#   
+# 
+# ggplot(temp_closeness, aes(x = quartile, y = closeness, fill = node_name)) +
+#   geom_bar(stat = "identity", position = position_dodge())
+# 
+# ggsave(here(paste0("Plots/", task, "_network_stats_closeness.jpeg")), width = 6, height = 4, dpi = 300)
+# 
+# # degree
+# temp_degree = network_stat %>%
+#   select(node_name, quartile, degree) %>%
+#   mutate(node_name = factor(node_name, levels = c("single", "teen", "decade", "hundred", "thousand")))
+#   
+# 
+# ggplot(temp_degree, aes(x = quartile, y = degree, fill = node_name)) +
+#   geom_bar(stat = "identity", position = position_dodge())
+# 
+# ggsave(here(paste0("Plots/", task, "_network_stats_degree.jpeg")), width = 6, height = 4, dpi = 300)
 ```
 
 ## Network stats: this approach is not appliable here, but keep for now in case co-author wants to see
 ```{r, echo = TRUE}
 
-data_wide_raw = read.csv(here("Data/data_n_raw_wide.csv"),header=TRUE,sep=",", check.names = "FALSE") %>%
-  mutate(quartile = ntile(acc, 4)) %>%
-  select(id, quartile, acc, c("2 v 8": "189 v 198"))
-
-data_wide = data_wide_raw %>%
-  gather(key = "item", value = "acc", c("2 v 8": "189 v 198"))
-
-data_item_category = read.csv(here("Data/data_n_item.csv"),header=TRUE,sep=",", check.names = "FALSE")
-
-data_wide_item_type = data_wide %>%
-  left_join(data_item_category, by = "item") %>%
-  select(id, quartile, acc, item_comparison) %>%
-  group_by(id, quartile, item_comparison) %>%
-  summarise(accuracy = mean(acc, na.rm = TRUE)) %>%
-  spread(item_comparison, accuracy) %>%
-  ungroup()
-
-network_data_temp = data_wide_item_type %>%
-  filter(quartile == 2) %>%
-  select(-id, -quartile)
-
-network = estimateNetwork(network_data_temp, default = "EBICglasso")
-plot(network, layout = "spring")
-
-
-network_data_temp = data_wide_raw %>%
-  filter(quartile == 1) %>%
-  select(-id, -quartile, -acc)
-
-network = estimateNetwork(network_data_temp, default = "pcor", missing = "pairwise")
-plot(network, layout = "spring")
-
-
-library("qgraph")
-i = 2
-# select current quartile data
-  temp_links = subset(links, quartile == i) %>%
-    filter(item_type_acc > .7) # only plot edges that have at least 70% children who answered correctly
-  net = graph_from_data_frame(d = temp_links, vertices = nodes, directed = F)
-
-  # convert to qgraph
-  a_matrix = as.matrix(as_adjacency_matrix(net, attr = "item_type_acc", sparse = F)) # don't forget to convert to matrix to be used with qgraph
-  # plot using qgraph instead
-  qgraph(a_matrix)
-  centralityPlot(a_matrix, include =c("Betweenness","Closeness","Strength"))
-
-library("bootnet")
-  # stability of centrality indices
-  central_stability = bootnet(a_matrix, nBoots = 1000, type = "case", statistics = c("edge", "strength", "closeness", "betweenness"))
-
-  
-  q1 = estimateNetwork(item_category_count, default = "EBICglasso")
-plot(q1, layout = "spring", labels = colnames(q1))
+# data_wide_raw = read.csv(here("Data/data_n_raw_wide.csv"),header=TRUE,sep=",", check.names = "FALSE") %>%
+#   mutate(quartile = ntile(acc, 4)) %>%
+#   select(id, quartile, acc, c("2 v 8": "189 v 198"))
+# 
+# data_wide = data_wide_raw %>%
+#   gather(key = "item", value = "acc", c("2 v 8": "189 v 198"))
+# 
+# data_item_category = read.csv(here("Data/data_n_item.csv"),header=TRUE,sep=",", check.names = "FALSE")
+# 
+# data_wide_item_type = data_wide %>%
+#   left_join(data_item_category, by = "item") %>%
+#   select(id, quartile, acc, item_comparison) %>%
+#   group_by(id, quartile, item_comparison) %>%
+#   summarise(accuracy = mean(acc, na.rm = TRUE)) %>%
+#   spread(item_comparison, accuracy) %>%
+#   ungroup()
+# 
+# network_data_temp = data_wide_item_type %>%
+#   filter(quartile == 2) %>%
+#   select(-id, -quartile)
+# 
+# network = estimateNetwork(network_data_temp, default = "EBICglasso")
+# plot(network, layout = "spring")
+# 
+# 
+# network_data_temp = data_wide_raw %>%
+#   filter(quartile == 1) %>%
+#   select(-id, -quartile, -acc)
+# 
+# network = estimateNetwork(network_data_temp, default = "pcor", missing = "pairwise")
+# plot(network, layout = "spring")
+# 
+# 
+# library("qgraph")
+# i = 2
+# # select current quartile data
+#   temp_links = subset(links, quartile == i) %>%
+#     filter(item_type_acc > .7) # only plot edges that have at least 70% children who answered correctly
+#   net = graph_from_data_frame(d = temp_links, vertices = nodes, directed = F)
+# 
+#   # convert to qgraph
+#   a_matrix = as.matrix(as_adjacency_matrix(net, attr = "item_type_acc", sparse = F)) # don't forget to convert to matrix to be used with qgraph
+#   # plot using qgraph instead
+#   qgraph(a_matrix)
+#   centralityPlot(a_matrix, include =c("Betweenness","Closeness","Strength"))
+# 
+# library("bootnet")
+#   # stability of centrality indices
+#   central_stability = bootnet(a_matrix, nBoots = 1000, type = "case", statistics = c("edge", "strength", "closeness", "betweenness"))
+# 
+#   
+#   q1 = estimateNetwork(item_category_count, default = "EBICglasso")
+# plot(q1, layout = "spring", labels = colnames(q1))
 ```

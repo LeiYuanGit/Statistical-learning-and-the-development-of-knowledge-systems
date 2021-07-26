@@ -1,21 +1,75 @@
----
-title: "Analysis 2_Decision trees_stats_N"
-output: rmarkdown::github_document
----
+Analysis 2\_Decision trees\_stats\_N
+================
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 ## Load libraries & data
-```{r}
+
+``` r
 library(party)
+```
+
+    ## Loading required package: grid
+
+    ## Loading required package: mvtnorm
+
+    ## Loading required package: modeltools
+
+    ## Loading required package: stats4
+
+    ## Loading required package: strucchange
+
+    ## Loading required package: zoo
+
+    ## 
+    ## Attaching package: 'zoo'
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     as.Date, as.Date.numeric
+
+    ## Loading required package: sandwich
+
+``` r
 library(tidyverse)
+```
+
+    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+
+    ## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+    ## ✓ tibble  3.1.2     ✓ dplyr   1.0.6
+    ## ✓ tidyr   1.1.3     ✓ stringr 1.4.0
+    ## ✓ readr   1.4.0     ✓ forcats 0.5.1
+
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## x stringr::boundary() masks strucchange::boundary()
+    ## x dplyr::filter()     masks stats::filter()
+    ## x dplyr::lag()        masks stats::lag()
+
+``` r
 library(here)
+```
+
+    ## here() starts at /Users/leyu6965/Dropbox/GitHub/Statistical-learning-and-the-development-of-knowledge-systems
+
+``` r
 library(caret)
+```
+
+    ## Loading required package: lattice
+
+    ## 
+    ## Attaching package: 'caret'
+
+    ## The following object is masked from 'package:purrr':
+    ## 
+    ##     lift
+
+``` r
 #library(partykit) 
 ```
+
 ## Load data (only need to change this for the More task analysis)
-```{r}
+
+``` r
 # indicate the task name, make it easier for adopting the same code for both the N and M tasks
 task_name = "n"
 
@@ -37,7 +91,8 @@ data_item_binomial = data_item_binomial %>%
 ```
 
 ## Grow Ctrees
-```{r}
+
+``` r
 set.seed(240)
 
 # make sure that all feature cols are factors
@@ -116,6 +171,28 @@ for (i in 1:4) {
     Analysis2_chisq_results = rbind(Analysis2_chisq_results, Analysis2_chisq_results_temp)
   }
 }
+```
 
+![](Analysis-2_Decision-trees_stats_N_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+    ## Warning in chisq.test(all_data$group, all_data$acc): Chi-squared approximation
+    ## may be incorrect
+
+![](Analysis-2_Decision-trees_stats_N_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
+
+    ## Warning in chisq.test(all_data$group, all_data$acc): Chi-squared approximation
+    ## may be incorrect
+
+    ## Warning in chisq.test(all_data$group, all_data$acc): Chi-squared approximation
+    ## may be incorrect
+
+![](Analysis-2_Decision-trees_stats_N_files/figure-gfm/unnamed-chunk-3-3.png)<!-- -->
+
+    ## Warning in chisq.test(all_data$group, all_data$acc): Chi-squared approximation
+    ## may be incorrect
+
+![](Analysis-2_Decision-trees_stats_N_files/figure-gfm/unnamed-chunk-3-4.png)<!-- -->
+
+``` r
 write.csv(Analysis2_chisq_results, here("Data/Analysis2_chisq_results.csv"), row.names = FALSE)
 ```

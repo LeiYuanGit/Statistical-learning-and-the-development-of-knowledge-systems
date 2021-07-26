@@ -1,21 +1,45 @@
----
-title: "Analysis 2_CHAID trees_N_M"
-output: rmarkdown::github_document
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+Analysis 2\_CHAID trees\_N\_M
+================
 
 ## R Markdown
 
-This code produce decision trees using the CHAID algothrim, as a way to verify the trees produced by the ctree algorithm
+This code produce decision trees using the CHAID algothrim, as a way to
+verify the trees produced by the ctree algorithm
 
 ## Load packages
-```{r cars}
+
+``` r
 library(tidyverse)
+```
+
+    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+
+    ## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+    ## ✓ tibble  3.1.2     ✓ dplyr   1.0.6
+    ## ✓ tidyr   1.1.3     ✓ stringr 1.4.0
+    ## ✓ readr   1.4.0     ✓ forcats 0.5.1
+
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## x dplyr::filter() masks stats::filter()
+    ## x dplyr::lag()    masks stats::lag()
+
+``` r
 library(here)
+```
+
+    ## here() starts at /Users/leyu6965/Dropbox/GitHub/Statistical-learning-and-the-development-of-knowledge-systems
+
+``` r
 library(partykit)
+```
+
+    ## Loading required package: grid
+
+    ## Loading required package: libcoin
+
+    ## Loading required package: mvtnorm
+
+``` r
 library(CHAID)
 ```
 
@@ -23,7 +47,7 @@ library(CHAID)
 
 Plot for the N task
 
-```{r}
+``` r
 # load data
 data_n_long = read.csv(here("Data/data_n_long.csv"))
 
@@ -58,11 +82,13 @@ for (i in 1:4) {
   dev.off()
 }
 ```
-## For the M task
+
+![](Analysis-2_CHAID-trees_N_M_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->![](Analysis-2_CHAID-trees_N_M_files/figure-gfm/unnamed-chunk-1-2.png)<!-- -->![](Analysis-2_CHAID-trees_N_M_files/figure-gfm/unnamed-chunk-1-3.png)<!-- -->![](Analysis-2_CHAID-trees_N_M_files/figure-gfm/unnamed-chunk-1-4.png)<!-- -->
+\#\# For the M task
 
 Plot for the M task
 
-```{r}
+``` r
 # load data
 data_more_long = read.csv(here("Data/data_more_long.csv"))
 
@@ -101,3 +127,5 @@ for (i in 1:4) {
   dev.off()
 }
 ```
+
+![](Analysis-2_CHAID-trees_N_M_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->![](Analysis-2_CHAID-trees_N_M_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->![](Analysis-2_CHAID-trees_N_M_files/figure-gfm/unnamed-chunk-2-3.png)<!-- -->![](Analysis-2_CHAID-trees_N_M_files/figure-gfm/unnamed-chunk-2-4.png)<!-- -->
