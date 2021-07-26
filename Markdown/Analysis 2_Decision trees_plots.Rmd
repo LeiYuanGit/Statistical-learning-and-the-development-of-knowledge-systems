@@ -1,5 +1,5 @@
 ---
-title: 'Analysis 2: Decision trees_N'
+title: 'Analysis 2: Decision trees plots'
 output: rmarkdown::github_document
 ---
 
