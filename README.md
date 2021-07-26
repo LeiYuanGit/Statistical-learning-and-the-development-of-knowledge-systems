@@ -4,7 +4,7 @@
 - Human knowledge of the world is often organized into systems of inter-related, multi-level, relational structures (e.g., language, symbolic numbers, physical systems). A perennial question has been how these knowledge systems are learned during development, or if they are indeed learnable at all, as opposed to constrained by prior, innately specified biases. Going beyond individual patterns (e.g., learning novel countable nouns or transitive verbs) and toy examples (e.g., learning ABA, AAB patterns) examined in the laboratory, in the current study, we trace the development of one knowledge system—how multi-digit symbolic numbers are named and how they are used to represent discrete quantities—during the preschool and kindergarten period (3- to 6-year-olds). Using a corpus data analysis approach, we combined several datasets from 678 children who contributed 13039 individual responses in two different tasks (i.e., identifying a named multi-digit number between two, or choosing a numerically larger number between two). Combining traditional statistical analyses methods, recursive partitioning machine learning algorithms and network analysis, we show how learning starts out with piecemeal knowledge and good enough solutions (as opposed to be guided by clean rules or biases), but gradually make connections among the various individual regularities and integrate them into a coherent knowledge system. Results have implications on the development of knowledge systems and school teaching of symbol systems.
 
 ## Participants and tasks
-- 678 three- to six-year-olds contributed data to this analysis. They have participated in various different studies that all aimed at investigating early multi-digit number knowledge. Each children have contributed various numbers of trials that range from xx to xxx. Two tasks were used. In the which-N task, xxxx. In the which-More task, xxxx. xx children has completed both tasks, while the remaining xx have only completed one task.  
+- 544 three- to six-year-olds contributed data to this analysis. They have participated in various different studies that all aimed at investigating early multi-digit number knowledge. Each children have contributed various numbers of trials that range from xx to xxx. Two tasks were used. In the which-N task, children selected a named number when given two written numbers. In the which-More task, children select the numerically larger numbers when given two written number. 323 children has completed both tasks, while the remaining 221 have only completed one task. There are a total of 867 completed tasks and 13039 completed trials. 
 
 For the particular items used in each tasks, see Table 1 (add link). 
 
@@ -44,3 +44,7 @@ This code generate decision trees for the N task.
 
 - [Analysis-3_Network-analysis_N.md](Markdown/Analysis-3_Network-analysis_N.md)
 This code generates network graphs for the which-N and more tasks. It also 1) compare and plot the global centrality measures of the N and More task, and 2) plot the degree of the individual nodes in the N and More networks. (Probably should seperately the second use in a different file)
+
+## To do...
+
+* Analysis 1: THe effect of some features (i.e., length_diff, transpostion)
