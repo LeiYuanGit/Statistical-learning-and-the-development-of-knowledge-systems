@@ -46,7 +46,7 @@ more_measures = read.csv(here("Data/data_more_network_measures.csv")) %>%
 
 n_more_measures = rbind(n_measures, more_measures)
 
-# # plot global centrality measures
+# plot global centrality measures
 network_stat_long = n_more_measures %>%
   group_by(task, quartile) %>%
   summarise(density = mean(density), diameter = mean(diameter), degree = mean(degree)) %>%

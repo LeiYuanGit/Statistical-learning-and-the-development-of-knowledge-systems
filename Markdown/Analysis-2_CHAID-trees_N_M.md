@@ -52,9 +52,12 @@ Plot for the N task
 data_n_long = read.csv(here("Data/data_n_long.csv"))
 
 ## Exclude items that had fewer than 15 responses
-inclusde_ids = read.csv(here("Data/data_n_item_binomial.csv")) %>%
-  filter(item_total_n < 15) %>%
+inclusde_ids = read.csv(here("Data/data_n_item_binomial.csv"))  %>%
+  filter(item_total_n >= 10) %>%
   select(item)
+
+data_n_long = data_n_long %>%
+  filter(item %in% inclusde_ids$item)
 
 # make sure that all feature cols are factors
 data_n_long = data_n_long %>%
@@ -94,11 +97,11 @@ data_more_long = read.csv(here("Data/data_more_long.csv"))
 
 ## Exclude items that had fewer than 15 responses
 inclusde_ids = read.csv(here("Data/data_more_item_binomial.csv")) %>%
-  filter(item_total_n < 15) %>%
+  filter(item_total_n >= 10) %>%
   select(item)
 
 data_more_long = data_more_long %>%
-  left_join(inclusde_ids, by = "item")
+  filter(item %in% inclusde_ids$item)
 
 # make sure that all feature cols are factors
 data_more_long = data_more_long %>%
