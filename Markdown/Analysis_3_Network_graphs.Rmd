@@ -1,13 +1,11 @@
 ---
-title: "Network analysis for the N task"
+title: "Network graphs"
 output: rmarkdown::github_document
 ---
 
 ## Overview
 
-This analysis is copied from the analysis on the More task, with the only changes being a) the data file names, b) the column numbers when converting from wide to long format (there are only 43 columns in the N data file, but 92 columns in the More data file), and c) the network graph names
-
-It will plot one network for each quartile. 
+This code generates one network for each quartile. 
 
 * The nodes represent the type (i.e., single, decade, hundred, thousand) of the two numbers in each trial. 
 * The edges represent the average accuracy for that type of trial (I only plot if the average accuracy is above 70%). 
@@ -36,10 +34,11 @@ Read in source file: data_n_long.csv
 
 ```{r, echo=TRUE}
 # set the task name
-task = "n"
+# task = "n"
+ task = "more"
 
 # load data
-data = read.csv(here(paste0("Data/data_", task, "_long.csv")),header=TRUE,sep=",", check.names = "FALSE") 
+data = read.csv(here(paste0("Data/data_", task, "_long.csv")), header=TRUE, sep=",", check.names = "FALSE") 
 
 # inspect it
 str(data)
@@ -65,16 +64,6 @@ data_item_type_summary = data %>%
 
 # inspect the results
 data_item_type_summary
-
-# look at what items are included in those categories
-item_category_count = data %>%
-  group_by(quartile, item, item_type,left_number_range, right_number_range) %>%
-  summarise(number_responses = n(), mean = mean(acc)) %>%
-  filter(number_responses > 9) %>%
-  arrange(quartile, item_type, left_number_range, right_number_range) %>%
-  as.data.frame()
-
-item_category_count
 ```
 
 ### Step 3:
@@ -94,24 +83,25 @@ nodes = unique(data_item_type_summary$left_number_range)
 # Loop through each quartile to generate 4 plots
 set.seed(99) # set a random seed, so that every time you run the code, it gives you the same network graph
 
-network_stat = NULL
+network_stat = NULL # empty variable to save network measures for later analysis
+
 for (i in 1:4) {
   
   # select current quartile data
   temp_links = subset(links, quartile == i) %>%
     filter(item_type_acc > .7) # only plot edges that have at least 70% children who answered correctly
+  
+  # construct the network
   net = graph_from_data_frame(d = temp_links, vertices = nodes, directed = F)  
   
-  # calculating network statistics
-  edge_density(net, loops = TRUE) #ratio of the number of edges to the maximum number of possible edges
-  diameter(net, directed = F)
-  mean(degree(net))
-  
+  # calculate and save network statistics
   cl = cluster_leading_eigen(net)
-  modularity(cl)
   
-  network_stat_temp = data.frame("quartile" = i, "density" = edge_density(net, loops = TRUE), "diameter" = diameter(net, directed = F), "degree_mean" = mean(degree(net)), "degree" = degree(net), "closeness" = closeness(net), "betweenness" = betweenness(net), "modularity" = modularity(cl)) %>%
-    rownames_to_column("node_name")
+  network_stat_temp = data.frame("quartile" = i, "density" = edge_density(net, loops = TRUE),
+                                 "diameter" = diameter(net, directed = F), "degree_mean" = mean(degree(net)), 
+                                 "degree" = degree(net), "closeness" = closeness(net), 
+                                 "betweenness" = betweenness(net), "modularity" = modularity(cl)) %>%
+    rownames_to_column("node_name") # turn the row names into another column called "node_name" (e.g., hundred, single)
   
   network_stat = rbind(network_stat, network_stat_temp)
   
@@ -122,7 +112,7 @@ for (i in 1:4) {
   graph_attr(net, "layout") = layout_with_kk
   
   # open a file
-  jpeg(here("Plots",paste0("/network_", task, "_q", i,".jpg")), units="in", width=10, height=9, res=300)
+  jpeg(here("Plots",paste0("/networks/network_", task, "_q", i,".jpg")), units="in", width=10, height=9, res=300)
   
   # plot the graph
   plot(net, edge.width = E(net)$item_type_acc * 10 , edge.label = E(net)$item_type_acc, 
@@ -130,7 +120,7 @@ for (i in 1:4) {
         edge.label.dist = 2.5, edge.label.cex = 1.5,
         vertex.color = "gray",
         vertex.label.cex = 2, vertex.label.color = "black", vertex.label.dist = 2.5)
-  legend("bottomright", legend = levels(temp_links$item_type), fill =colrs)
+  legend("topleft", inset = c(-0.05, 0), legend = levels(temp_links$item_type), fill =colrs)
   
   # close the file
   dev.off()
@@ -141,15 +131,22 @@ write.csv(network_stat, here(paste0("Data/data_", task, "_network_measures.csv")
 
 ```
 
-##### Now, show the plots
+##### Now, show the N plots
 
-![Quartile 1 network graph for the N task](../Plots/network_n_q1.jpg){width=70%}
+![Quartile 1 network graph for the N task](../Plots/networks/network_n_q1.jpg){width=70%}
 
-![Quartile 2 network graph for the N task](../Plots/network_n_q2.jpg){width=70%}
+![Quartile 2 network graph for the N task](../Plots/networks/network_n_q2.jpg){width=70%}
 
-![Quartile 3 network graph for the N task](../Plots/network_n_q3.jpg){width=70%}
+![Quartile 3 network graph for the N task](../Plots/networks/network_n_q3.jpg){width=70%}
 
-![Quartile 4 network graph for the N task](../Plots/network_n_q4.jpg){width=70%}
+![Quartile 4 network graph for the N task](../Plots/networks/network_n_q4.jpg){width=70%}
+
+##### Now, show the More plots
+
+![Quartile 1 network graph for the More task](../Plots/networks/network_more_q1.jpg){width=70%}
+![Quartile 2 network graph for the More task](../Plots/networks/network_more_q2.jpg){width=70%}
+![Quartile 3 network graph for the More task](../Plots/networks/network_more_q3.jpg){width=70%}
+![Quartile 4 network graph for the More task](../Plots/networks/network_more_q4.jpg){width=70%}
 
 ## plot network measures individually, don't want this, but keep for now in case co-author is interested
 ```{r}
