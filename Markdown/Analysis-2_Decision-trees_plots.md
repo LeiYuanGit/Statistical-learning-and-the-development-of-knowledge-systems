@@ -14,65 +14,10 @@ This code generates
 
 ``` r
 library(party)
-```
-
-    ## Loading required package: grid
-
-    ## Loading required package: mvtnorm
-
-    ## Loading required package: modeltools
-
-    ## Loading required package: stats4
-
-    ## Loading required package: strucchange
-
-    ## Loading required package: zoo
-
-    ## 
-    ## Attaching package: 'zoo'
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     as.Date, as.Date.numeric
-
-    ## Loading required package: sandwich
-
-``` r
 library(tidyverse)
-```
-
-    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
-
-    ## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-    ## ✓ tibble  3.1.2     ✓ dplyr   1.0.6
-    ## ✓ tidyr   1.1.3     ✓ stringr 1.4.0
-    ## ✓ readr   1.4.0     ✓ forcats 0.5.1
-
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## x stringr::boundary() masks strucchange::boundary()
-    ## x dplyr::filter()     masks stats::filter()
-    ## x dplyr::lag()        masks stats::lag()
-
-``` r
 library(here)
-```
-
-    ## here() starts at /Users/leyu6965/Dropbox/GitHub/Statistical-learning-and-the-development-of-knowledge-systems
-
-``` r
 library(caret)
-```
 
-    ## Loading required package: lattice
-
-    ## 
-    ## Attaching package: 'caret'
-
-    ## The following object is masked from 'package:purrr':
-    ## 
-    ##     lift
-
-``` r
 # CHAID package is not on CRAN, so special install 
 #install.packages("CHAID", repos="http://R-Forge.R-project.org")
 #library(CHAID)
@@ -154,12 +99,12 @@ for (i in 1:4) {
   # 
   # # save terminal node number back to the long format data: the function "where()" show all trial data rows with terminal node number
   temp_data = cbind(temp_data, where(ct)) %>%
-  rename(terminal_node = `where(ct)`)
+    rename(terminal_node = `where(ct)`)
   data_long_terminal = rbind(data_long_terminal, temp_data)
 }
 
 # save prediction accuracy in file
-write.csv(prediction_acc_results, here(paste0("Data/", task_name, "ctree_model_accuracies.csv")), row.names = FALSE)
+# write.csv(prediction_acc_results, here(paste0("Data/", task_name, "ctree_model_accuracies.csv")), row.names = FALSE)
 
 # current_node = nodes(ct, where = 1)
 # current_weight = current_node[[1]]$weights
@@ -167,7 +112,7 @@ write.csv(prediction_acc_results, here(paste0("Data/", task_name, "ctree_model_a
 #  select(places, current_weight)
 ```
 
-## Getting more terminal overall performance and item graphs
+## Getting more terminal overall performance and item-level binomial plots
 
 ``` r
 # Summarize terminal nodes overall accuracy
@@ -199,16 +144,8 @@ data_item_binomial_terminal = data_item_binomial %>%
   mutate(quartile_item = paste(quartile, item)) %>%
   left_join(data_long_terminal_shortened, by = "quartile_item")
 
-# # total item number for each quartile
-# total_item_num_quartile = data_item_binomial_terminal %>%
-#   group_by(quartile, terminal_node) %>%
-#   summarise(item_count = n())
-# 
-# max_item = max(total_item_num_quartile$item_count)
-
 # plot the item level accuracy graph for each terminal
 for (i in 1:4) {
-  fontsize = 9
   # get current quartile data
   temp_quartile = subset(data_item_binomial_terminal, quartile == i) %>%
     droplevels() # so don't interfere with the unique function later
@@ -222,10 +159,6 @@ for (i in 1:4) {
     # set fontsize
     fontsize = 9
     
-    # # figure out the resized height (relative to the max number of items for all quartile all terminal)
-    # total_item_num = subset(total_item_num_quartile,quartile == i & terminal_node == nodes[j])$item_count
-    # resized_height = total_item_num/max_item 
-    
     # select current data
     data_item_temp = subset(temp_quartile, terminal_node == nodes[j])
     
@@ -235,9 +168,6 @@ for (i in 1:4) {
       geom_point( color="orange", size=2) +
       theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                          panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) +
-      #ggtitle("The Which-N task") +
-      #ylab("Proportion of correct trials") + 
-      #xlab("Items") +
       geom_hline(yintercept=0.5, linetype="dashed", color = "orange", size = 0.5) +
       theme(plot.title = element_text(size = fontsize, hjust = 0.5), text=element_text(size=fontsize),
             axis.title.x=element_blank(), axis.title.y = element_blank()) +
