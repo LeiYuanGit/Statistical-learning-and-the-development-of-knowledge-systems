@@ -147,6 +147,7 @@ write.csv(network_stat, here(paste0("Data/data_", task, "_network_measures.csv")
 ![Quartile 2 network graph for the More task](../Plots/networks/network_more_q2.jpg){width=70%}
 ![Quartile 3 network graph for the More task](../Plots/networks/network_more_q3.jpg){width=70%}
 ![Quartile 4 network graph for the More task](../Plots/networks/network_more_q4.jpg){width=70%}
+```
 
 ## plot network measures individually, don't want this, but keep for now in case co-author is interested
 ```{r}

@@ -48,3 +48,6 @@ This code generates network graphs for the which-N and more tasks. It also 1) co
 ## To do...
 
 * Analysis 1: THe effect of some features (i.e., length_diff, transpostion)
+* Analysis 1: school plot generate y axis labels
+* Analysis 1: Re-organize plots, using code?
+* In the final analysis (Analysis 6), we focus on children who contributed to both tasks and examine how the two tasks grown in tandem using within-subjects data.

@@ -118,9 +118,21 @@ subj_all %>%
 ```
 ## model: acc_subj ~ age + sex + task + location
 ```{r}
-model = lm(acc_subj ~ age_months + task + sex + location, data = data_combined_subj_level)
+# N task, without school factor
+model = lm(acc_subj ~ age_months + sex, data = subset(data_combined_subj_level, task == "N"))
 summary(model)
 anova(model)
+
+# More task, without school factor
+model = lm(acc_subj ~ age_months + sex, data = subset(data_combined_subj_level, task == "More"))
+summary(model)
+anova(model)
+
+# both tasks, with school factor
+model = lm(acc_subj ~ age_months + sex + location, data = subset(data_combined_subj_level, location != "Lab"))
+summary(model)
+anova(model)
+  
 ```
 
 ## Plots
@@ -144,7 +156,7 @@ ggplot(data = data_combined_subj_level, aes(x = age_months, y = acc_subj, color 
 fig = here("Plots", "descriptive", "scatterplot_acc_by_age_gender.jpeg")
 ggsave(fig, height = 4, width = 6, dpi = 300)
 
-# school plot: box plot
+# box plot; the effect of school
 ggplot(data_combined_subj_level, aes(x = reorder(location, acc_subj), y = acc_subj)) +
   geom_boxplot() +
   #geom_jitter() +
@@ -173,6 +185,46 @@ ggsave(fig, height = 4, width = 6, dpi = 300)
 ```
 ## The effect of some features (i.e., length_diff, transposition)
 ```{r}
-data_combined_trial_level = rbind(data_n_trial_level_raw, data_more_trial_level_raw)
+# the More task
+temp_more = data_more_trial_level_raw %>%
+  filter(age_years_group > 2 & age_years_group < 7) %>%
+  group_by(category, age_years_group, id) %>%
+  summarise(subj_acc = mean(acc)) %>%
+  group_by(category, age_years_group) %>%
+  summarise(group_acc = mean(subj_acc), se_acc = sd(subj_acc)/sqrt(n()), n = n()) %>%
+  ungroup() %>%
+  mutate(age_years_group = factor(age_years_group),
+         category = factor(category, levels = c("S", "M-DP", "M-SP-no-T", "M-SP-with-T"))) 
 
+ggplot(temp_more, aes(x = age_years_group, y = group_acc, fill = category)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  geom_errorbar(aes(ymin=group_acc-se_acc, ymax=group_acc+se_acc), width=.2,
+                 position=position_dodge(.9)) +
+  theme_classic() +
+  geom_hline(yintercept=0.5, linetype="dashed", color = "black", size=0.5)
+
+fig = here("Plots", "descriptive", "acc_by_category_more.jpeg")
+ggsave(fig, height = 4, width = 6, dpi = 300)
+
+# the N task
+temp_n = data_n_trial_level_raw %>%
+  filter(age_years_group > 2 & age_years_group < 7) %>%
+  group_by(category, age_years_group, id) %>%
+  summarise(subj_acc = mean(acc)) %>%
+  group_by(category, age_years_group) %>%
+  summarise(group_acc = mean(subj_acc), se_acc = sd(subj_acc)/sqrt(n()), n = n()) %>%
+  ungroup() %>%
+  mutate(age_years_group = factor(age_years_group),
+         category = factor(category, levels = c("S", "M-DP", "M-SP-no-T", "M-SP-with-T"))) 
+
+ggplot(temp_n, aes(x = age_years_group, y = group_acc, fill = category)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  geom_errorbar(aes(ymin=group_acc-se_acc, ymax=group_acc+se_acc), width=.2,
+                 position=position_dodge(.9)) +
+  theme_classic() +
+  geom_hline(yintercept=0.5, linetype="dashed", color = "black", size=0.5)
+
+fig = here("Plots", "descriptive", "acc_by_category_n.jpeg")
+ggsave(fig, height = 4, width = 6, dpi = 300)
+  
 ```

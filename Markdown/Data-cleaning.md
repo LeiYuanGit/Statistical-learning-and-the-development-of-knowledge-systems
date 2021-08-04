@@ -16,18 +16,32 @@ It also identifies children who had completed both tasks, by
 concatenating their “DOB, DOE, and location” and find common values both
 the n and more data.
 
-The critical output files for further analyses are:
+The critical output files for further analyses are: \* Trial-level Long
+format data:
 
--   Data/data\_n\_long.csv (long format trial-level data for N, with
-    subject quartile and feature information)  
--   Data/data\_more\_long.csv (long format trial-level data for More,
-    with subject quartile and feature information)
--   Data/data\_within\_ids.csv (the ids for children who had completed
-    both task)
--   Data/data\_n\_item\_binomial.csv (binomial test results for each
-    item within each quartile in the which-N task)
--   Data/data\_more\_item\_binomial.csv (binomial test results for each
-    item within each quartile in the which-More task)
+-   -   Data/data\_n\_long.csv (long format trial-level data for N, with
+        subject quartile and feature information, number of completed
+        tasks)  
+
+-   -   Data/data\_more\_long.csv (long format trial-level data for
+        More, with subject quartile and feature information, number of
+        completed tasks)
+
+-   Within-subj data:
+
+-   -   Data/all\_within\_data.csv (data for both the N and More tasks
+        for children who completed both tasks)
+
+-   -   Data/data\_within\_ids.csv (the ids for children who had
+        completed both task)
+
+-   Item-level binomial tests:
+
+-   -   Data/data\_n\_item\_binomial.csv (binomial test results for each
+        item within each quartile in the which-N task)
+
+-   -   Data/data\_more\_item\_binomial.csv (binomial test results for
+        each item within each quartile in the which-More task)
 
 ## Load libraries
 
@@ -161,7 +175,7 @@ data_n_long_data <- read.csv(here("Data/data_n_long.csv"), check.names = FALSE)
 # identify ids that are present at both the N and More tasks
 all_within_ids <- inner_join(data_more_long_ids, data_n_long_ids, by = "within_id", all = TRUE) # find children who did both tasks
 
-# create a new trial-level dataset for children who recieved both tasks 
+# create a new trial-level data set for children who received both tasks 
 data_more_long_within_data = data_more_long_data %>%
   filter(within_id %in% all_within_ids$within_id) %>%
   mutate(task = "More")

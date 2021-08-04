@@ -6,10 +6,9 @@
 402 v 42,3,2v3,y,n,n,y,omit,M-DP,402,42,hundred,decade,hundred_decade,decade_hundred,Inserting_zero
 670 v 67,3,2v3,y,n,n,y,omit,M-DP,670,67,hundred,decade,hundred_decade,decade_hundred,Inserting_zero
 807 v 78,3,2v3,y,n,n,y,omit,M-DP,807,78,hundred,decade,hundred_decade,decade_hundred,Inserting_zero
-900 v 99,3,2v3,y,n,n,y,omit,M-DP,900,99,hundred,decade,hundred_decade,decade_hundred,Inserting_zero
+900 v 99,3,2v3,y,n,n,n,omit,M-DP,900,99,hundred,decade,hundred_decade,decade_hundred,Inserting_zero
 485 v 4085,4,3v4,y,n,n,y,omit,M-DP,485,4085,hundred,thousand,hundred_thousand,hundred_thousand,Inserting_zero
-1000v100,4,3v4,n,n,n,y,omit,M-DP,1000,100,thousand,hundred,thousand_hundred,hundred_thousand,Inserting_zero
-1000 v 100,4,3v4,n,n,n,y,omit,M-DP,1000,100,thousand,hundred,thousand_hundred,hundred_thousand,Inserting_zero
+1000 v 100,4,3v4,y,n,n,y,omit,M-DP,1000,100,thousand,hundred,thousand_hundred,hundred_thousand,Inserting_zero
 3070 v 307,4,3v4,y,n,n,y,omit,M-DP,3070,307,thousand,hundred,thousand_hundred,hundred_thousand,Inserting_zero
 102 v 120,3,3v3,n,n,y,n,3d_trans,M-SP-with-T,102,120,hundred,hundred,hundred_hundred,hundred_hundred,Transposition
 189 v 198,3,3v3,n,n,y,n,3d_trans,M-SP-with-T,189,198,hundred,hundred,hundred_hundred,hundred_hundred,Transposition
