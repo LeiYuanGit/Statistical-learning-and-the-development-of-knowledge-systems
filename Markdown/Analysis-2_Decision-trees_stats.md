@@ -1,69 +1,26 @@
 Analysis 2\_Decision trees\_stats
 ================
 
+This code calculates the chi square statistics for each split in the
+decision trees by quartile for the N and More tasks.
+
+It utilize these files in the Data folder:
+
+-   data\_n\_tree\_stats\_helper.csv
+-   data\_n\_tree\_stats\_helper.csv Both files contain columns:
+    quartile, split\_node, left\_terminal, right\_terminal, feature,
+    feature\_value.
+
+The value are hand-coded after producing the tree plots using Analysis
+2\_Decision trees\_plots.Rmd, that contains inner node split information
+
 ## Load libraries & data
 
 ``` r
 library(party)
-```
-
-    ## Loading required package: grid
-
-    ## Loading required package: mvtnorm
-
-    ## Loading required package: modeltools
-
-    ## Loading required package: stats4
-
-    ## Loading required package: strucchange
-
-    ## Loading required package: zoo
-
-    ## 
-    ## Attaching package: 'zoo'
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     as.Date, as.Date.numeric
-
-    ## Loading required package: sandwich
-
-``` r
 library(tidyverse)
-```
-
-    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
-
-    ## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-    ## ✓ tibble  3.1.2     ✓ dplyr   1.0.6
-    ## ✓ tidyr   1.1.3     ✓ stringr 1.4.0
-    ## ✓ readr   1.4.0     ✓ forcats 0.5.1
-
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## x stringr::boundary() masks strucchange::boundary()
-    ## x dplyr::filter()     masks stats::filter()
-    ## x dplyr::lag()        masks stats::lag()
-
-``` r
 library(here)
-```
-
-    ## here() starts at /Users/leyu6965/Dropbox/GitHub/Statistical-learning-and-the-development-of-knowledge-systems
-
-``` r
 library(caret)
-```
-
-    ## Loading required package: lattice
-
-    ## 
-    ## Attaching package: 'caret'
-
-    ## The following object is masked from 'package:purrr':
-    ## 
-    ##     lift
-
-``` r
 #library(partykit) 
 ```
 
@@ -71,12 +28,10 @@ library(caret)
 
 ``` r
 # indicate the task name, make it easier for adopting the same code for both the N and M tasks
-task_name = "n"
+task_name = "more"
 
 # input files
 data_long = read.csv(here(paste0("Data/data_", task_name,"_long.csv")))
-
-data_tree_nodes = read.csv(here(paste0("Data/data_tree_nodes_",task_name,".csv")))
 
 data_tree_stats_help = read.csv(here(paste0("Data/data_", task_name, "_tree_stats_helper.csv")))
 # this file contain information about each split information (e.g., left/right terminal nodes, the splitting features, left/right feature_value)
@@ -104,10 +59,6 @@ data_long = data_long %>%
          transposition = as.factor(transposition),
          inserting_zero = as.factor(inserting_zero))
 
-# initialize empty variables 
-prediction_acc_results  = NULL  # save confusion matrix results for each tree
-data_long_terminal = NULL # save the terminal node number for each row (or trial), for plotting the item-level accuracy graphs for each quartile
-
 Analysis2_chisq_results = NULL
 
 set.seed(240)
@@ -115,8 +66,6 @@ set.seed(240)
 for (i in 1:4) {
   # get quartile data
   temp_data = subset(data_long, quartile == i) 
-  temp_inner_nodes = subset(data_tree_nodes, quartile == i) %>%
-    filter(node_type == "inner") 
   
   temp_splits = subset(data_tree_stats_help, quartile == i)
   temp_split_nodes = unique(temp_splits$split_node)
@@ -129,11 +78,11 @@ for (i in 1:4) {
   
   plot(ct)
   
-  # save tree node number to quartile data
+  # save tree terminal node number to quartile data
   a = where(ct)
   temp_data_with_node_number = cbind(temp_data,a)
   
-  # loop through each inner node and computer the stats
+  # loop through each split, get all left and right split data, and computer the stats
   for (j in 1:temp_split_nodes_num) {
     temp_data = subset(temp_splits, split_node == temp_split_nodes[j])
     
@@ -173,18 +122,10 @@ for (i in 1:4) {
 }
 ```
 
-![](Analysis-2_Decision-trees_stats_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](Analysis-2_Decision-trees_stats_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->![](Analysis-2_Decision-trees_stats_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
 
-    ## Warning in chisq.test(all_data$group, all_data$acc): Chi-squared approximation
-    ## may be incorrect
-
-![](Analysis-2_Decision-trees_stats_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
-
-    ## Warning in chisq.test(all_data$group, all_data$acc): Chi-squared approximation
-    ## may be incorrect
-
-    ## Warning in chisq.test(all_data$group, all_data$acc): Chi-squared approximation
-    ## may be incorrect
+    ## Warning in data.frame(quartile = i, split = temp_split_nodes[j], left_acc =
+    ## left_acc, : row names were found from a short variable and have been discarded
 
 ![](Analysis-2_Decision-trees_stats_files/figure-gfm/unnamed-chunk-3-3.png)<!-- -->
 

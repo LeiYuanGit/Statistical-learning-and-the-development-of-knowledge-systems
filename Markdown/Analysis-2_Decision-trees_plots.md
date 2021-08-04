@@ -29,8 +29,8 @@ library(caret)
 
 ``` r
 # indicate the task name, make it easier for adopting the same code for both the N and M tasks
-task_name = "n"
-#task_name = "more"
+#task_name = "n"
+task_name = "more"
 
 # input files
 data_long = read.csv(here(paste0("Data/data_", task_name,"_long.csv")))

@@ -3,11 +3,21 @@ title: "Analysis 2_Decision trees_stats"
 output: rmarkdown::github_document
 ---
 
+This code calculates the chi square statistics for each split in the decision trees by quartile for the N and More tasks.  
+
+It utilize these files in the Data folder:
+
+* data_n_tree_stats_helper.csv
+* data_n_tree_stats_helper.csv
+Both files contain columns: quartile, split_node, left_terminal, right_terminal, feature, feature_value.
+
+The value are hand-coded after producing the tree plots using Analysis 2_Decision trees_plots.Rmd, that contains inner node split information
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 ## Load libraries & data
-```{r}
+```{r, message=FALSE}
 library(party)
 library(tidyverse)
 library(here)
@@ -17,12 +27,10 @@ library(caret)
 ## Load data (only need to change this for the More task analysis)
 ```{r}
 # indicate the task name, make it easier for adopting the same code for both the N and M tasks
-task_name = "n"
+task_name = "more"
 
 # input files
 data_long = read.csv(here(paste0("Data/data_", task_name,"_long.csv")))
-
-data_tree_nodes = read.csv(here(paste0("Data/data_tree_nodes_",task_name,".csv")))
 
 data_tree_stats_help = read.csv(here(paste0("Data/data_", task_name, "_tree_stats_helper.csv")))
 # this file contain information about each split information (e.g., left/right terminal nodes, the splitting features, left/right feature_value)
@@ -49,10 +57,6 @@ data_long = data_long %>%
          transposition = as.factor(transposition),
          inserting_zero = as.factor(inserting_zero))
 
-# initialize empty variables 
-prediction_acc_results  = NULL  # save confusion matrix results for each tree
-data_long_terminal = NULL # save the terminal node number for each row (or trial), for plotting the item-level accuracy graphs for each quartile
-
 Analysis2_chisq_results = NULL
 
 set.seed(240)
@@ -60,8 +64,6 @@ set.seed(240)
 for (i in 1:4) {
   # get quartile data
   temp_data = subset(data_long, quartile == i) 
-  temp_inner_nodes = subset(data_tree_nodes, quartile == i) %>%
-    filter(node_type == "inner") 
   
   temp_splits = subset(data_tree_stats_help, quartile == i)
   temp_split_nodes = unique(temp_splits$split_node)
@@ -74,11 +76,11 @@ for (i in 1:4) {
   
   plot(ct)
   
-  # save tree node number to quartile data
+  # save tree terminal node number to quartile data
   a = where(ct)
   temp_data_with_node_number = cbind(temp_data,a)
   
-  # loop through each inner node and computer the stats
+  # loop through each split, get all left and right split data, and computer the stats
   for (j in 1:temp_split_nodes_num) {
     temp_data = subset(temp_splits, split_node == temp_split_nodes[j])
     
