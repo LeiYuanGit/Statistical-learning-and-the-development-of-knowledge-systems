@@ -113,7 +113,7 @@ subj_all %>%
   tabyl(age_years_group)
 
 subj_all %>%
-  mutate(tested_in_school = ifelse(location == "Lab", "y", "n")) %>%
+  mutate(tested_in_school = ifelse(location == "Lab", "n", "y")) %>%
   tabyl(tested_in_school)
 ```
 ## model: acc_subj ~ age + sex + task + location
@@ -128,7 +128,7 @@ model = lm(acc_subj ~ age_months + sex, data = subset(data_combined_subj_level, 
 summary(model)
 anova(model)
 
-# both tasks, with school factor
+# both tasks, for school tested subjects only
 model = lm(acc_subj ~ age_months + sex + location, data = subset(data_combined_subj_level, location != "Lab"))
 summary(model)
 anova(model)
@@ -172,7 +172,7 @@ ggplot(data_combined_subj_level, aes(x = reorder(location, acc_subj), y = acc_su
 fig = here("Plots", "descriptive", "acc_by_school.jpeg")
 ggsave(fig, height = 4, width = 4.5, dpi = 300)
 
-# task difference plot, N develops earlier than more: box plot with jitters?
+# density plot: task difference plot, N develops earlier than more
 ggplot(data_combined_subj_level, aes(x = acc_subj, fill = task)) +
   geom_density(aes(y = ..scaled..), adjust = 1.5, alpha = 0.4) +
   xlab("Accuracy") +
