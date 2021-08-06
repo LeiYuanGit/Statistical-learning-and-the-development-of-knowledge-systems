@@ -22,8 +22,8 @@ Read in source file: data\_n\_long.csv
 
 ``` r
 # set the task name
-# task = "n"
- task = "more"
+ task = "n"
+# task = "more"
 
 # load data
 data = read.csv(here(paste0("Data/data_", task, "_long.csv")), header=TRUE, sep=",", check.names = "FALSE") 
@@ -32,94 +32,94 @@ data = read.csv(here(paste0("Data/data_", task, "_long.csv")), header=TRUE, sep=
 str(data)
 ```
 
-    ## 'data.frame':    6861 obs. of  33 variables:
-    ##  $ excel_file_name          : chr  "Which is More_N Data/sheet: which is more - symbols" "Which is More_N Data/sheet: which is more - symbols" "Which is More_N Data/sheet: which is more - symbols" "Which is More_N Data/sheet: which is more - symbols" ...
-    ##  $ id                       : int  7 14 18 25 32 39 46 53 60 64 ...
-    ##  $ sex                      : chr  "M" "F" "F" "F" ...
-    ##  $ dob                      : chr  "4/30/07" "5/21/05" "12/9/05" "12/9/05" ...
-    ##  $ doe                      : chr  "4/7/10" "4/7/10" "4/5/10" "4/5/10" ...
-    ##  $ age_months               : num  35.3 58.6 51.9 51.9 55.4 ...
-    ##  $ age_years                : num  2.94 4.88 4.33 4.33 4.62 ...
-    ##  $ age_years_group          : int  2 4 4 4 4 5 5 5 3 2 ...
-    ##  $ location                 : chr  "Lab" "Lab" "KA" "KA" ...
-    ##  $ percentage_correct       : num  30 80 70 70 80 80 50 70 70 80 ...
-    ##  $ ses                      : int  NA NA 1 1 1 1 1 1 1 1 ...
-    ##  $ within_id                : chr  "4/30/07 4/7/10 M Lab" "5/21/05 4/7/10 F Lab" "12/9/05 4/5/10 F KA" "12/9/05 4/5/10 F KA" ...
-    ##  $ twins                    : chr  "n" "y" "y" "y" ...
-    ##  $ item                     : chr  "201 v 21" "201 v 21" "201 v 21" "201 v 21" ...
-    ##  $ acc                      : int  0 0 1 1 1 1 1 1 1 1 ...
-    ##  $ subj_acc                 : num  0.3 0.8 0.7 0.7 0.8 0.8 0.5 0.7 0.7 0.8 ...
-    ##  $ quartile                 : int  1 3 3 3 3 3 1 3 3 3 ...
-    ##  $ bigger_places            : int  3 3 3 3 3 3 3 3 3 3 ...
-    ##  $ places                   : chr  "2v3" "2v3" "2v3" "2v3" ...
-    ##  $ length_diff              : chr  "y" "y" "y" "y" ...
-    ##  $ one_digit_diff_not_zero  : chr  "n" "n" "n" "n" ...
+    ## 'data.frame':    6178 obs. of  33 variables:
+    ##  $ excel_file_name          : chr  "Meap 3 Data only/sheet: combined data" "Meap 3 Data only/sheet: combined data" "Meap 3 Data only/sheet: combined data" "Meap 3 Data only/sheet: combined data" ...
+    ##  $ id                       : int  31 32 33 34 35 36 37 38 39 40 ...
+    ##  $ sex                      : chr  NA NA NA NA ...
+    ##  $ dob                      : chr  "9/19/10" "5/6/10" "12/10/09" "11/8/09" ...
+    ##  $ doe                      : chr  "5/22/13" "5/21/13" "5/21/13" "5/21/13" ...
+    ##  $ age_months               : num  32.1 36.5 41.4 42.4 44.1 ...
+    ##  $ age_years                : num  2.68 3.05 3.45 3.54 3.67 3.99 4.02 4.07 4.11 4.11 ...
+    ##  $ age_years_group          : int  2 3 3 3 3 3 4 4 4 4 ...
+    ##  $ location                 : chr  "KA" "KA" "KA" "KA" ...
+    ##  $ percentage_correct       : num  0.562 0.375 0.438 0.625 0.75 ...
+    ##  $ ses                      : int  1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ within_id                : chr  "9/19/10 5/22/13 NA KA" "5/6/10 5/21/13 NA KA" "12/10/09 5/21/13 NA KA" "11/8/09 5/21/13 NA KA" ...
+    ##  $ twins                    : chr  "n" "n" "n" "n" ...
+    ##  $ item                     : chr  "2 v 8" "2 v 8" "2 v 8" "2 v 8" ...
+    ##  $ acc                      : int  1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ subj_acc                 : num  0.562 0.375 0.438 0.625 0.75 ...
+    ##  $ quartile                 : int  1 1 1 2 2 2 1 1 1 1 ...
+    ##  $ bigger_places            : int  1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ places                   : chr  "1v1" "1v1" "1v1" "1v1" ...
+    ##  $ length_diff              : chr  "n" "n" "n" "n" ...
+    ##  $ one_digit_diff_not_zero  : chr  "y" "y" "y" "y" ...
     ##  $ transposition            : chr  "n" "n" "n" "n" ...
-    ##  $ inserting_zero           : chr  "y" "y" "y" "y" ...
-    ##  $ e3_categories            : chr  "omit" "omit" "omit" "omit" ...
-    ##  $ category                 : chr  "M-DP" "M-DP" "M-DP" "M-DP" ...
-    ##  $ left_num                 : int  201 201 201 201 201 201 201 201 201 201 ...
-    ##  $ right_num                : int  21 21 21 21 21 21 21 21 21 21 ...
-    ##  $ left_number_range        : chr  "hundred" "hundred" "hundred" "hundred" ...
-    ##  $ right_number_range       : chr  "decade" "decade" "decade" "decade" ...
-    ##  $ item_comparison_unordered: chr  "hundred_decade" "hundred_decade" "hundred_decade" "hundred_decade" ...
-    ##  $ item_comparison          : chr  "decade_hundred" "decade_hundred" "decade_hundred" "decade_hundred" ...
-    ##  $ item_type                : chr  "Inserting_zero" "Inserting_zero" "Inserting_zero" "Inserting_zero" ...
-    ##  $ completed_task           : int  1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ inserting_zero           : chr  "n" "n" "n" "n" ...
+    ##  $ e3_categories            : chr  "single" "single" "single" "single" ...
+    ##  $ category                 : chr  "S" "S" "S" "S" ...
+    ##  $ left_num                 : int  2 2 2 2 2 2 2 2 2 2 ...
+    ##  $ right_num                : int  8 8 8 8 8 8 8 8 8 8 ...
+    ##  $ left_number_range        : chr  "single" "single" "single" "single" ...
+    ##  $ right_number_range       : chr  "single" "single" "single" "single" ...
+    ##  $ item_comparison_unordered: chr  "single_single" "single_single" "single_single" "single_single" ...
+    ##  $ item_comparison          : chr  "single_single" "single_single" "single_single" "single_single" ...
+    ##  $ item_type                : chr  "Neither" "Neither" "Neither" "Neither" ...
+    ##  $ completed_task           : int  2 2 2 2 2 2 2 2 1 1 ...
 
 ``` r
 head(data) 
 ```
 
-    ##                                       excel_file_name id sex     dob    doe
-    ## 1 Which is More_N Data/sheet: which is more - symbols  7   M 4/30/07 4/7/10
-    ## 2 Which is More_N Data/sheet: which is more - symbols 14   F 5/21/05 4/7/10
-    ## 3 Which is More_N Data/sheet: which is more - symbols 18   F 12/9/05 4/5/10
-    ## 4 Which is More_N Data/sheet: which is more - symbols 25   F 12/9/05 4/5/10
-    ## 5 Which is More_N Data/sheet: which is more - symbols 32   M 8/24/05 4/5/10
-    ## 6 Which is More_N Data/sheet: which is more - symbols 39   M 2/21/05 4/5/10
-    ##   age_months age_years age_years_group location percentage_correct ses
-    ## 1         35       2.9               2      Lab                 30  NA
-    ## 2         59       4.9               4      Lab                 80  NA
-    ## 3         52       4.3               4       KA                 70   1
-    ## 4         52       4.3               4       KA                 70   1
-    ## 5         55       4.6               4       KA                 80   1
-    ## 6         61       5.1               5       KA                 80   1
-    ##              within_id twins     item acc subj_acc quartile bigger_places
-    ## 1 4/30/07 4/7/10 M Lab     n 201 v 21   0      0.3        1             3
-    ## 2 5/21/05 4/7/10 F Lab     y 201 v 21   0      0.8        3             3
-    ## 3  12/9/05 4/5/10 F KA     y 201 v 21   1      0.7        3             3
-    ## 4  12/9/05 4/5/10 F KA     y 201 v 21   1      0.7        3             3
-    ## 5  8/24/05 4/5/10 M KA     n 201 v 21   1      0.8        3             3
-    ## 6  2/21/05 4/5/10 M KA     n 201 v 21   1      0.8        3             3
-    ##   places length_diff one_digit_diff_not_zero transposition inserting_zero
-    ## 1    2v3           y                       n             n              y
-    ## 2    2v3           y                       n             n              y
-    ## 3    2v3           y                       n             n              y
-    ## 4    2v3           y                       n             n              y
-    ## 5    2v3           y                       n             n              y
-    ## 6    2v3           y                       n             n              y
+    ##                         excel_file_name id  sex      dob     doe age_months
+    ## 1 Meap 3 Data only/sheet: combined data 31 <NA>  9/19/10 5/22/13         32
+    ## 2 Meap 3 Data only/sheet: combined data 32 <NA>   5/6/10 5/21/13         37
+    ## 3 Meap 3 Data only/sheet: combined data 33 <NA> 12/10/09 5/21/13         41
+    ## 4 Meap 3 Data only/sheet: combined data 34 <NA>  11/8/09 5/21/13         42
+    ## 5 Meap 3 Data only/sheet: combined data 35 <NA>  9/20/09 5/22/13         44
+    ## 6 Meap 3 Data only/sheet: combined data 36 <NA>  5/28/09 5/21/13         48
+    ##   age_years age_years_group location percentage_correct ses
+    ## 1       2.7               2       KA               0.56   1
+    ## 2       3.0               3       KA               0.38   1
+    ## 3       3.5               3       KA               0.44   1
+    ## 4       3.5               3       KA               0.62   1
+    ## 5       3.7               3       KA               0.75   1
+    ## 6       4.0               3       KA               0.62   1
+    ##                within_id twins  item acc subj_acc quartile bigger_places places
+    ## 1  9/19/10 5/22/13 NA KA     n 2 v 8   1     0.56        1             1    1v1
+    ## 2   5/6/10 5/21/13 NA KA     n 2 v 8   1     0.38        1             1    1v1
+    ## 3 12/10/09 5/21/13 NA KA     n 2 v 8   1     0.44        1             1    1v1
+    ## 4  11/8/09 5/21/13 NA KA     n 2 v 8   1     0.62        2             1    1v1
+    ## 5  9/20/09 5/22/13 NA KA     n 2 v 8   1     0.75        2             1    1v1
+    ## 6  5/28/09 5/21/13 NA KA     n 2 v 8   1     0.62        2             1    1v1
+    ##   length_diff one_digit_diff_not_zero transposition inserting_zero
+    ## 1           n                       y             n              n
+    ## 2           n                       y             n              n
+    ## 3           n                       y             n              n
+    ## 4           n                       y             n              n
+    ## 5           n                       y             n              n
+    ## 6           n                       y             n              n
     ##   e3_categories category left_num right_num left_number_range
-    ## 1          omit     M-DP      201        21           hundred
-    ## 2          omit     M-DP      201        21           hundred
-    ## 3          omit     M-DP      201        21           hundred
-    ## 4          omit     M-DP      201        21           hundred
-    ## 5          omit     M-DP      201        21           hundred
-    ## 6          omit     M-DP      201        21           hundred
-    ##   right_number_range item_comparison_unordered item_comparison      item_type
-    ## 1             decade            hundred_decade  decade_hundred Inserting_zero
-    ## 2             decade            hundred_decade  decade_hundred Inserting_zero
-    ## 3             decade            hundred_decade  decade_hundred Inserting_zero
-    ## 4             decade            hundred_decade  decade_hundred Inserting_zero
-    ## 5             decade            hundred_decade  decade_hundred Inserting_zero
-    ## 6             decade            hundred_decade  decade_hundred Inserting_zero
+    ## 1        single        S        2         8            single
+    ## 2        single        S        2         8            single
+    ## 3        single        S        2         8            single
+    ## 4        single        S        2         8            single
+    ## 5        single        S        2         8            single
+    ## 6        single        S        2         8            single
+    ##   right_number_range item_comparison_unordered item_comparison item_type
+    ## 1             single             single_single   single_single   Neither
+    ## 2             single             single_single   single_single   Neither
+    ## 3             single             single_single   single_single   Neither
+    ## 4             single             single_single   single_single   Neither
+    ## 5             single             single_single   single_single   Neither
+    ## 6             single             single_single   single_single   Neither
     ##   completed_task
-    ## 1              1
-    ## 2              1
-    ## 3              1
-    ## 4              1
-    ## 5              1
-    ## 6              1
+    ## 1              2
+    ## 2              2
+    ## 3              2
+    ## 4              2
+    ## 5              2
+    ## 6              2
 
 ### Step 2:
 
@@ -146,21 +146,21 @@ data_item_type_summary = data %>%
 data_item_type_summary
 ```
 
-    ## # A tibble: 53 x 6
+    ## # A tibble: 38 x 6
     ## # Rowwise: 
     ##    quartile item_type      item_type_acc number_responses left_number_range
     ##       <int> <chr>                  <dbl>            <int> <chr>            
-    ##  1        1 Inserting_zero          0.67              103 decade           
-    ##  2        1 Inserting_zero          0.57               21 single           
-    ##  3        1 Neither                 0.39              116 decade           
-    ##  4        1 Neither                 0.49               68 decade           
-    ##  5        1 Neither                 0.43              552 hundred          
-    ##  6        1 Neither                 0.44              126 single           
-    ##  7        1 Neither                 0.44              105 teen             
-    ##  8        1 Neither                 0.34               41 thousand         
-    ##  9        1 Transposition           0.41              100 decade           
-    ## 10        1 Transposition           0.41              391 hundred          
-    ## # … with 43 more rows, and 1 more variable: right_number_range <chr>
+    ##  1        1 Inserting_zero          0.41              616 decade           
+    ##  2        1 Inserting_zero          0.37               59 hundred          
+    ##  3        1 Neither                 0.5                88 hundred          
+    ##  4        1 Neither                 0.73              101 single           
+    ##  5        1 Neither                 0.58              101 single           
+    ##  6        1 Neither                 0.44              176 teen             
+    ##  7        1 Transposition           0.38              209 hundred          
+    ##  8        1 Transposition           0.45               65 thousand         
+    ##  9        2 Inserting_zero          0.64              534 decade           
+    ## 10        2 Inserting_zero          0.45               71 hundred          
+    ## # … with 28 more rows, and 1 more variable: right_number_range <chr>
 
 ### Step 3:
 
@@ -229,6 +229,9 @@ for (i in 1:4) {
     ## Warning in closeness(net): At centrality.c:2784 :closeness centrality is not
     ## well-defined for disconnected graphs
 
+    ## Warning in closeness(net): At centrality.c:2784 :closeness centrality is not
+    ## well-defined for disconnected graphs
+
 ``` r
 # save network measures for future plotting
 write.csv(network_stat, here(paste0("Data/data_", task, "_network_measures.csv")))
@@ -259,46 +262,46 @@ write.csv(network_stat, here(paste0("Data/data_", task, "_network_measures.csv")
 <img src="../Plots/networks/network_more_q3.jpg" style="width:70.0%" alt="Quartile 3 network graph for the More task" />
 <img src="../Plots/networks/network_more_q4.jpg" style="width:70.0%" alt="Quartile 4 network graph for the More task" />
 
-## plot network measures individually, don’t want this, but keep for now in case co-author is interested
 
-``` r
-# network_stat_long = network_stat %>%
-#   group_by(quartile) %>%
-#   summarise(density = mean(density), diameter = mean(diameter), degree = mean(degree), modularity = mean(modularity)) %>%
-#   gather(key = "measure", value = "value", c("density":"modularity")) %>%
-#   mutate(quartile = as.factor(quartile),
-#          value = round(value, 3)) %>%
-#   as.data.frame()
-# 
-# ggplot(data = network_stat_long, aes(x = quartile, y = value, group = 1)) +
-#   geom_line() +
-#   facet_wrap(~measure, scales = "free") 
-# 
-# ggsave(here(paste0("Plots/", task, "_network_stats.jpeg")), width = 6, height = 4, dpi = 300)
-# 
-# # individual node analysis
-# # closeness
-# temp_closeness = network_stat %>%
-#   select(node_name, quartile, closeness) %>%
-#   mutate(node_name = factor(node_name, levels = c("single", "teen", "decade", "hundred", "thousand")))
-#   
-# 
-# ggplot(temp_closeness, aes(x = quartile, y = closeness, fill = node_name)) +
-#   geom_bar(stat = "identity", position = position_dodge())
-# 
-# ggsave(here(paste0("Plots/", task, "_network_stats_closeness.jpeg")), width = 6, height = 4, dpi = 300)
-# 
-# # degree
-# temp_degree = network_stat %>%
-#   select(node_name, quartile, degree) %>%
-#   mutate(node_name = factor(node_name, levels = c("single", "teen", "decade", "hundred", "thousand")))
-#   
-# 
-# ggplot(temp_degree, aes(x = quartile, y = degree, fill = node_name)) +
-#   geom_bar(stat = "identity", position = position_dodge())
-# 
-# ggsave(here(paste0("Plots/", task, "_network_stats_degree.jpeg")), width = 6, height = 4, dpi = 300)
-```
+    ## plot network measures individually, don't want this, but keep for now in case co-author is interested
+
+    ```r
+    # network_stat_long = network_stat %>%
+    #   group_by(quartile) %>%
+    #   summarise(density = mean(density), diameter = mean(diameter), degree = mean(degree), modularity = mean(modularity)) %>%
+    #   gather(key = "measure", value = "value", c("density":"modularity")) %>%
+    #   mutate(quartile = as.factor(quartile),
+    #          value = round(value, 3)) %>%
+    #   as.data.frame()
+    # 
+    # ggplot(data = network_stat_long, aes(x = quartile, y = value, group = 1)) +
+    #   geom_line() +
+    #   facet_wrap(~measure, scales = "free") 
+    # 
+    # ggsave(here(paste0("Plots/", task, "_network_stats.jpeg")), width = 6, height = 4, dpi = 300)
+    # 
+    # # individual node analysis
+    # # closeness
+    # temp_closeness = network_stat %>%
+    #   select(node_name, quartile, closeness) %>%
+    #   mutate(node_name = factor(node_name, levels = c("single", "teen", "decade", "hundred", "thousand")))
+    #   
+    # 
+    # ggplot(temp_closeness, aes(x = quartile, y = closeness, fill = node_name)) +
+    #   geom_bar(stat = "identity", position = position_dodge())
+    # 
+    # ggsave(here(paste0("Plots/", task, "_network_stats_closeness.jpeg")), width = 6, height = 4, dpi = 300)
+    # 
+    # # degree
+    # temp_degree = network_stat %>%
+    #   select(node_name, quartile, degree) %>%
+    #   mutate(node_name = factor(node_name, levels = c("single", "teen", "decade", "hundred", "thousand")))
+    #   
+    # 
+    # ggplot(temp_degree, aes(x = quartile, y = degree, fill = node_name)) +
+    #   geom_bar(stat = "identity", position = position_dodge())
+    # 
+    # ggsave(here(paste0("Plots/", task, "_network_stats_degree.jpeg")), width = 6, height = 4, dpi = 300)
 
 ## Network stats: this approach is not appliable here, but keep for now in case co-author wants to see
 

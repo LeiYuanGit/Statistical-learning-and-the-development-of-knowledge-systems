@@ -8,7 +8,7 @@ This code calculates the chi square statistics for each split in the decision tr
 It utilize these files in the Data folder:
 
 * data_n_tree_stats_helper.csv
-* data_n_tree_stats_helper.csv
+* data_more_tree_stats_helper.csv
 Both files contain columns: quartile, split_node, left_terminal, right_terminal, feature, feature_value.
 
 The value are hand-coded after producing the tree plots using Analysis 2_Decision trees_plots.Rmd, that contains inner node split information

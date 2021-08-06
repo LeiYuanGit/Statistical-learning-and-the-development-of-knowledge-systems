@@ -34,8 +34,8 @@ Read in source file: data_n_long.csv
 
 ```{r, echo=TRUE}
 # set the task name
-# task = "n"
- task = "more"
+ task = "n"
+# task = "more"
 
 # load data
 data = read.csv(here(paste0("Data/data_", task, "_long.csv")), header=TRUE, sep=",", check.names = "FALSE") 
